@@ -22,7 +22,7 @@ function Post() {
                 className=" w-full object-cover"
             />
             {/* Like and comment */}
-            <div className='flex justify-around mt-2'>
+            <div className='flex justify-around mt-3'>
                 <div className='select-none flex items-center cursor-pointer text-blue-600'>
                     <ThumbUpRoundedIcon fontSize='medium' className='scale-x-[-1]' />
                     <span className='font-medium ml-1 text-sm'>Like</span>
