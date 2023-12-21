@@ -18,6 +18,7 @@ function CreatePost() {
             setImage()
         }
     }
+    
     return (
         <div className='max-w-md mx-auto px-1  '>
             <h1 className='text-3xl font-semibold pt-5 mb-10'>Create a post</h1>
@@ -48,16 +49,17 @@ function CreatePost() {
                             className="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 hover:text-indigo-500"
                         >
                             <span>Upload a file</span>
-                            <input onChange={onImageUpload} id="file-upload" accept="image/*" name="file-upload" type="file" className="sr-only" />
+                            <input onChange={onImageUpload} id="file-upload" accept="image/*,.heic,.heif" type="file" className="sr-only" />
                         </label>
                         <p className="pl-1">or drag and drop</p>
                     </div>
                     <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF</p>
                 </div>}
                 {image && <img
-                    className='object-contain h-full'
+                    onError={()=>{setImage("https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png")}}
+                    className='object-contain h-full w-full max-h-96'
                     src={image}
-                    alt="" />
+                    alt="Not found" />
 
                 }
             </div>
