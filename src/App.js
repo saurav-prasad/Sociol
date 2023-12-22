@@ -7,8 +7,9 @@ import BottomNavbar from './components/bottomNavbar/BottomNavbar';
 import CreatePost from './components/createPost.js/CreatePost';
 import Home from './components/home/Home';
 import Profile from './components/profile/Profile';
-import { HomeIcon, PlusSquare,  } from 'lucide-react';
+import { HomeIcon, PlusSquare, } from 'lucide-react';
 import Post from './components/post/Post';
+import UpdateProfile from './components/updateProfile/UpdateProfile';
 
 function App() {
   const navbarList = [
@@ -23,7 +24,7 @@ function App() {
       href: '/createpost'
     },
     {
-      icon: <img className="h-8 w-8 rounded-full object-cover" src='https://scontent.cdninstagram.com/v/t39.30808-6/411117180_18401964661006330_5999756429314918776_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xNDQweDE4MDAuc2RyIn0&_nc_ht=scontent.cdninstagram.com&_nc_cat=110&_nc_ohc=gD2e-uhIfYMAX_Nd21r&edm=APs17CUAAAAA&ccb=7-5&ig_cache_key=MzI1ODM3NzE1NzY3MTI3NDY2Nw%3D%3D.2-ccb7-5&oh=00_AfAZ-tSxWb9vjgAgShNTfa1wJke7ky9IK6L4AQBpgcMqmQ&oe=6585C199&_nc_sid=10d13b' alt='dp' />,
+      icon: <img className="h-8 w-8 rounded-full object-cover" src='https://media.licdn.com/dms/image/D4D35AQGjCohxNWch7w/profile-framedphoto-shrink_100_100/0/1701414168395?e=1703829600&v=beta&t=HramxGi8yFg0kn5pAZaeu_4hSID3cwCpfjszSUcN1BM' alt='dp' />,
       name: "Profile",
       href: '/profile'
     },
@@ -54,7 +55,7 @@ function App() {
         {
           path: "/feed",
           element: <>
-          <Post/>
+            <Post />
           </>
         },
         {
@@ -64,6 +65,10 @@ function App() {
         {
           path: "/profile",
           element: <Profile />
+        },
+        {
+          path: "/profile/update",
+          element: < UpdateProfile />
         }
       ]
     }

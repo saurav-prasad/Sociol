@@ -2,31 +2,37 @@ import React, { useState } from 'react'
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import sliceString from '../../sliceString';
+import { Fade, Zoom } from "react-awesome-reveal";
 
 function PostCard() {
     const [more, setMore] = useState(false)
     return (
-        <div className="flex flex-col rounded-md py-2 border bg-white mb-10 ">
+        <div className="flex flex-col rounded-lg py-2 border bg-white mb-10 ">
             {/* user details */}
             <div className='flex items-center justify-start px-3 mb-3'>
                 <img class="inline-block h-10 w-10 object-cover rounded-full border bg-gradient-to-r from-purple-500 to-pink-500"
-                    src="https://scontent.cdninstagram.com/v/t39.30808-6/411117180_18401964661006330_5999756429314918776_n.jpg?stp=dst-jpg_e15&efg=eyJ2ZW5jb2RlX3RhZyI6ImltYWdlX3VybGdlbi4xNDQweDE4MDAuc2RyIn0&_nc_ht=scontent.cdninstagram.com&_nc_cat=110&_nc_ohc=gD2e-uhIfYMAX_Nd21r&edm=APs17CUAAAAA&ccb=7-5&ig_cache_key=MzI1ODM3NzE1NzY3MTI3NDY2Nw%3D%3D.2-ccb7-5&oh=00_AfAZ-tSxWb9vjgAgShNTfa1wJke7ky9IK6L4AQBpgcMqmQ&oe=6585C199&_nc_sid=10d13b" alt="" />
-                <p className='ml-2 text-md font-semibold'>Saurav</p>
+                    src="https://media.licdn.com/dms/image/D4D35AQGjCohxNWch7w/profile-framedphoto-shrink_100_100/0/1701414168395?e=1703829600&v=beta&t=HramxGi8yFg0kn5pAZaeu_4hSID3cwCpfjszSUcN1BM" alt="" />
+                <div className='flex ml-2 flex-col justify-center items-sart'>
+                    <p className=' text-left text-md font-semibold'>Saurav</p>
+                    <span className='text-left text-xs text-zinc-600'>Frontend developer</span>
+                </div>
             </div>
             {/* Post text */}
-            <p className='text-left mb-3 px-3 transition-all text-md antialiased'>
+            <div className='text-left mb-3 px-3 transition-all text-md antialiased leading-8'>
                 {
-                    sliceString('Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus nobis deleniti fugit officiis porro quidem repellendus consequuntur tenetur commodi atque magnam, magni natus molestiae numquam tempora reprehenderit nemo accusamus ipsum fugiat ea beatae sit earum quascommodi! Quis iusto aliquam, vero, quae neque dolorum blanditiis quod commodi accusamus perferendis assumenda adipisci rem. Molestias dolore quia tempora autem impedit reprehenderit hic cupiditate consequuntur officia.', more ? 0 : 150)
+                    sliceString(`For most of the year, we thought 2023 was the hardest year for us at leap.club but now looking back, we feel it was the best year, as it taught us so much. We missed our year end target, and as founders and founding team members, we will continue to aim for more. `, more ? 0 : 150)
                 }
-                {<span onClick={() => { setMore(!more) }} className='cursor-pointer text-xs'>&nbsp;&nbsp; Read {more ? 'less' : 'more'}</span>}
+                {<span onClick={() => { setMore(!more) }} className='select-none cursor-pointer text-xs p-1'>&nbsp;&nbsp; Read {more ? 'less' : 'more'}</span>}
 
-            </p>
+            </div>
             {/* Post image */}
-            <img
-                src="https://media.licdn.com/dms/image/D4D22AQGUDDe1R2ztVQ/feedshare-shrink_2048_1536/0/1700572375719?e=1706140800&v=beta&t=3Q1sAexsbuzJ4RQXybtI7FeZz-UTm5k4Pd5Z8hA2Xoo"
-                alt="Post"
-                className="h-auto w-full object-contain"
-            />
+            <Fade duration={200} direction='top' triggerOnce={true}>
+                <img
+                    src="https://media.licdn.com/dms/image/D5622AQFnFsyjB-B_Pw/feedshare-shrink_2048_1536/0/1703221649492?e=1706140800&v=beta&t=Zxqj4vP83RhUN-6p7kJlXKOFZyE9abdKm1lXGWBcs5Q"
+                    alt="Post"
+                    className="h-auto w-full object-contain"
+                />
+            </Fade>
             {/* Like and comment */}
             <div className='flex justify-around mt-3 border-y'>
                 <div className='select-none p-2 flex items-center cursor-pointer text-blue-600'>
