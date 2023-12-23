@@ -1,4 +1,4 @@
-import { RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import SigninSignup from './components/signinSignup/SigninSignup';
 import SideNavbar from './components/sideNavbar/SideNavbar';
@@ -10,6 +10,7 @@ import Profile from './components/profile/Profile';
 import { HomeIcon, PlusSquare, } from 'lucide-react';
 import Post from './components/post/Post';
 import UpdateProfile from './components/updateProfile/UpdateProfile';
+import { useSelector } from 'react-redux';
 
 function App() {
   const navbarList = [
@@ -22,11 +23,6 @@ function App() {
       icon: <PlusSquare className="h-6 w-6" aria-hidden="true" />,
       name: "Create",
       href: '/createpost'
-    },
-    {
-      icon: <img className="h-8 w-8 rounded-full object-cover" src='https://media.licdn.com/dms/image/D4D35AQGjCohxNWch7w/profile-framedphoto-shrink_100_100/0/1701414168395?e=1703829600&v=beta&t=HramxGi8yFg0kn5pAZaeu_4hSID3cwCpfjszSUcN1BM' alt='dp' />,
-      name: "Profile",
-      href: '/profile'
     },
   ]
 
@@ -42,7 +38,8 @@ function App() {
       children: [
         {
           path: '/',
-          element: ""
+          element: <Navigate to="/feed" />,
+
         },
         {
           path: '/signup',
@@ -74,7 +71,8 @@ function App() {
     }
 
   ])
-
+  const {user} = useSelector((state) => state.authReducer)
+  console.log(user);
   return (
     <div className="App relative min-h-screen bg-slate-50 text-gray-900">
       {/* <Test /> */}

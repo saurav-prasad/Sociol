@@ -1,13 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./signinSignup.css"
-import { Link, useLocation } from 'react-router-dom'
-import { auth } from '../../axios'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { auth, profile } from '../../axios'
+import { useDispatch, useSelector } from 'react-redux'
+import { signIn } from '../../features/auth/authSlice'
 
 function SigninSignup() {
+    const dispatch = useDispatch()
     const [data, setData] = useState({ username: "", email: "", phone: "", password: "" })
     const [submitStatus, setSubmitStatus] = useState(false)
     const [error, setError] = useState("")
     const pathname = useLocation().pathname
+    const navigate = useNavigate()
 
     const onChange = (e) => {
         setError()
@@ -24,8 +28,12 @@ function SigninSignup() {
                     email: data.email,
                     password: data.password
                 })
+                const userData = { ...signinRequest.data.data, token: signinRequest.data.token }
+                dispatch(signIn(userData))
+
                 setError(signinRequest.data?.message)
                 setSubmitStatus(false)
+                navigate('/profile')
             }
             else if (pathname === '/signup') {
                 console.log(data);
@@ -33,16 +41,27 @@ function SigninSignup() {
                     email: data.email,
                     password: data.password,
                     username: data.username,
-                    phone: data.phone
+                    phone: data?.phone
                 })
+
+                const userData = { ...signupRequest.data.data, token: signupRequest.data.token }
+                dispatch(signIn(userData))
                 setError(signupRequest.data?.message)
                 setSubmitStatus(false)
+                navigate('/profile')
             }
         } catch (error) {
             setError(error?.response?.data?.message)
             setSubmitStatus(false)
         }
     }
+    const { user } = useSelector(state => state.authReducer)
+    useEffect(() => {
+        if (user) {
+            navigate(-1)
+        }
+    })
+
     return (
         <>
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
@@ -120,7 +139,7 @@ function SigninSignup() {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    autoComplete="current-password"
+                                    autoComplete="password"
                                     required
                                     onChange={onChange}
                                     className="block w-full rounded-md border-0 p-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"

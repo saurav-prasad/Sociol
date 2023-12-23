@@ -1,36 +1,49 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PostCard from '../postCard/PostCard'
 import { Power } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { signOut } from '../../features/auth/authSlice'
 
 function Profile() {
     const navigate = useNavigate()
+    const { user } = useSelector(state => state.authReducer)
+    const dispatch = useDispatch()
+    const handelSignout = () => {
+        dispatch(signOut())
+        navigate('/signin')
+    }
+    useEffect(()=>{
+        if(!user){
+            navigate('/signin')
+        }
+    })
     return (
         <div className='max-w-xl mx-auto'>
             {/* Profile page header */}
             <div className='sm:hidden flex flex-row justify-between items-center px-2 py-1 mb-5 border-b bg-white'>
                 <h1 className='w-full text-left font-bold text-3xl font-[Whisper]'>Sociol</h1>
-                <div>
-                    <Power strokeWidth={3} className='' />
-                </div>
+                {user && <div>
+                    <Power onClick={handelSignout} strokeWidth={3} className='' />
+                </div>}
             </div>
             {/* Profile infos */}
             <div className='sm:pt-8 max-w-xl mx-auto px-2 sm:border-b sm:pb-6'>
                 <div className=' flex flex-row justify-start'>
                     {/* profile info */}
                     <div className='flex shrink-0 justify-center items-center mr-3 md:mr-12'>
-                        <img className="md:h-40 md:w-40 h-28 w-28 rounded-full border border-y-purple-600 border-x-violet-500 object-cover"
-                            src='https://media.licdn.com/dms/image/D4D35AQGjCohxNWch7w/profile-framedphoto-shrink_100_100/0/1701414168395?e=1703829600&v=beta&t=HramxGi8yFg0kn5pAZaeu_4hSID3cwCpfjszSUcN1BM'
+                        <img className="md:h-40 md:w-40 h-28 p-1 w-28 rounded-full border border-y-purple-600 border-x-violet-500 object-cover"
+                            src={user?.profilePhoto}
                             alt='profile' />
                     </div>
                     {/* Profile name and follow button */}
                     <div className='flex flex-col w-full space-y-3'>
                         <div className='flex flex-row justify-between'>
                             <h1 className='text-xl font-normal'>
-                                Saurav
+                                {user?.username}
                             </h1>
                             <button
-                            onClick={()=>{navigate('/profile/update')}}
+                                onClick={() => { navigate('/profile/update') }}
                                 type="button"
                                 className="h-7 rounded-md bg-sky-500  px-5 py-1 text-xs md:text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900"
                             >
@@ -61,17 +74,16 @@ function Profile() {
                         <div className='flex flex-row justify-start'>
                             <div className=''>
                                 <p className='font-medium text-left text-base text-zinc-950'>
-                                    Saurav Prasad
+                                    {user?.name}
                                 </p>
                                 <p className='text-sm text-left text-zinc-950'>
-                                    Frontend developer
+                                    {user?.about}
                                 </p>
                             </div>
                         </div>
                         <div className='flex flex-row justify-start mt-4'>
                             <p className='font-[500] text-sm text-gray-900 text-left'>
-                                Love❤ to click 📸
-                                Passion💪 to code 👨‍💻
+                                {user?.bio}
                             </p>
                         </div>
                     </div>

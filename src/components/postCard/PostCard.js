@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import sliceString from '../../sliceString';
-import { Fade, Zoom } from "react-awesome-reveal";
+import { Fade } from "react-awesome-reveal";
 
 function PostCard() {
     const [more, setMore] = useState(false)
@@ -26,7 +26,7 @@ function PostCard() {
 
             </div>
             {/* Post image */}
-            <Fade duration={200} direction='top' triggerOnce={true}>
+            <Fade duration={250} direction='top' fraction={1} triggerOnce={true}>
                 <img
                     src="https://media.licdn.com/dms/image/D5622AQFnFsyjB-B_Pw/feedshare-shrink_2048_1536/0/1703221649492?e=1706140800&v=beta&t=Zxqj4vP83RhUN-6p7kJlXKOFZyE9abdKm1lXGWBcs5Q"
                     alt="Post"
