@@ -33,7 +33,7 @@ function Navbar({ navbarList }) {
                         }
                         <span
                             onClick={() => {
-                                navigate(user ? '/profile' : '/signin'); window.scrollTo(0, 0);
+                                navigate(user ? '/profile' : '/auth'); window.scrollTo(0, 0);
                             }}
                             className="select-none cursor-pointer flex transform items-center rounded-lg px-3 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
                         >

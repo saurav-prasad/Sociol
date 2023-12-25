@@ -3,7 +3,7 @@ import PostCard from '../postCard/PostCard'
 
 function Post() {
     return (
-        <div className='max-w-md mx-auto'>
+        <div className='max-w-lg mx-auto'>
             <PostCard />
             <PostCard />
             <PostCard />

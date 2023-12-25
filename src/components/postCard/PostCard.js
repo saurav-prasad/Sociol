@@ -18,15 +18,15 @@ function PostCard() {
                 </div>
             </div>
             {/* Post text */}
-            <div className='text-left mb-3 px-3 transition-all text-md antialiased leading-8'>
+            <div className='text-left mb-3 px-3 transition-all text-md antialiased leading-7 '>
                 {
                     sliceString(`For most of the year, we thought 2023 was the hardest year for us at leap.club but now looking back, we feel it was the best year, as it taught us so much. We missed our year end target, and as founders and founding team members, we will continue to aim for more. `, more ? 0 : 150)
                 }
-                {<span onClick={() => { setMore(!more) }} className='select-none cursor-pointer text-xs p-1'>&nbsp;&nbsp; Read {more ? 'less' : 'more'}</span>}
+                {<span onClick={() => { setMore(!more) }} className='whitespace-nowrap select-none cursor-pointer text-xs px-2 py-1 text-center'>&nbsp;&nbsp; Read {more ? 'less' : 'more'}</span>}
 
             </div>
             {/* Post image */}
-            <Fade duration={250} direction='top' fraction={1} triggerOnce={true}>
+            <Fade duration={250} direction='top' triggerOnce={true}>
                 <img
                     src="https://media.licdn.com/dms/image/D5622AQFnFsyjB-B_Pw/feedshare-shrink_2048_1536/0/1703221649492?e=1706140800&v=beta&t=Zxqj4vP83RhUN-6p7kJlXKOFZyE9abdKm1lXGWBcs5Q"
                     alt="Post"

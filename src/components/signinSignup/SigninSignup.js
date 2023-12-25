@@ -1,29 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import "./signinSignup.css"
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { auth, profile } from '../../axios'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { auth } from '../../axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { signIn } from '../../features/auth/authSlice'
 
 function SigninSignup() {
     const dispatch = useDispatch()
     const [data, setData] = useState({ username: "", email: "", phone: "", password: "" })
+    const [signin, setSignin] = useState(true)
     const [submitStatus, setSubmitStatus] = useState(false)
+    const [testSubmitStatus, setTestSubmitStatus] = useState(false)
     const [error, setError] = useState("")
     const pathname = useLocation().pathname
     const navigate = useNavigate()
+
+    const onSigninSignupClick = () => {
+        setError();
+        setSignin(!signin)
+        setData({ username: "", email: "", phone: "", password: "" })
+    }
 
     const onChange = (e) => {
         setError()
         setData({ ...data, [e.target.name]: e.target.value })
     }
     const onSubmit = async (e) => {
-        e.preventDefault()
+        e?.preventDefault()
         setSubmitStatus(true)
         try {
 
-            if (pathname === '/signin') {
-                console.log(data);
+            if (signin) {
                 const signinRequest = await auth.post('/getuser', {
                     email: data.email,
                     password: data.password
@@ -35,7 +42,7 @@ function SigninSignup() {
                 setSubmitStatus(false)
                 navigate('/profile')
             }
-            else if (pathname === '/signup') {
+            else if (!signin) {
                 console.log(data);
                 const signupRequest = await auth.post('/createuser', {
                     email: data.email,
@@ -51,14 +58,33 @@ function SigninSignup() {
                 navigate('/profile')
             }
         } catch (error) {
+            console.log(error);
             setError(error?.response?.data?.message)
             setSubmitStatus(false)
         }
     }
     const { user } = useSelector(state => state.authReducer)
+
+    const testUserSignin = async () => {
+        setTestSubmitStatus(true)
+        try {
+            const signinRequest = await auth.post('/getuser', { email: 'test@sociol.com', password: 'test123' })
+            const userData = { ...signinRequest.data.data, token: signinRequest.data.token }
+            dispatch(signIn(userData))
+
+            setError(signinRequest.data?.message)
+            setTestSubmitStatus(false)
+            navigate('/profile')
+
+        } catch (err) {
+            setError(error?.response?.data?.message)
+            setTestSubmitStatus(false)
+        }
+    }
+
     useEffect(() => {
         if (user) {
-            navigate(-1)
+            navigate('/')
         }
     })
 
@@ -76,9 +102,9 @@ function SigninSignup() {
                     </h2>
                 </div>
 
-                <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
+                <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm ">
                     <form className="space-y-6" onSubmit={onSubmit}>
-                        {pathname === '/signup' &&
+                        {!signin &&
                             <div>
                                 <label htmlFor="email" className="flex text-sm font-medium leading-6  text-gray-900">
                                     Username<span className='text-red-600 text-lg'>*</span>
@@ -112,7 +138,7 @@ function SigninSignup() {
                                 />
                             </div>
                         </div>
-                        {pathname === "/signup" &&
+                        {!signin &&
                             <div>
                                 <label htmlFor="email" className="flex text-sm font-medium leading-6  text-gray-900">
                                     Phone
@@ -151,21 +177,30 @@ function SigninSignup() {
                         </label>
                         <div>
                             <button
-                                disabled={!setSubmitStatus}
+                                disabled={!submitStatus}
                                 type="submit"
-                                className="flex w-full justify-center items-center rounded-md h-9 bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                                className="cursor-pointer flex w-full justify-center items-center rounded-md h-9 bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
                             >
                                 {submitStatus ? <span class="loader"></span> :
-                                    pathname === "/signup" ? "Sign-up" : "Sign-in"}
+                                    !signin ? "Sign-up" : "Sign-in"}
+                            </button>
+                            <button
+                                disabled={testSubmitStatus}
+                                type="button"
+                                onClick={testUserSignin}
+                                className="cursor-pointer flex mt-5 w-full justify-center items-center rounded-md h-9 bg-blue-600 px-3 py-1.5 text-sm font-medium leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            >
+                                {testSubmitStatus ? <span class="loader"></span> :
+                                    'Sign-in as test user'}
                             </button>
                         </div>
                     </form>
 
                     <p className="mt-10 text-center text-sm text-gray-500">
-                        {pathname === "/signin" ? `Don't have an account?${' '}` : `Have an account?${' '}`}
-                        <Link onClick={() => setError()} to={pathname === "/signup" ? "/signin" : "/signup"} className="font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
+                        {signin ? `Don't have an account?${' '}` : `Have an account?${' '}`}
+                        <span onClick={onSigninSignupClick} className="cursor-pointer font-semibold leading-6 text-indigo-600 hover:text-indigo-500">
                             {pathname === "/signup" ? "Sign-in" : "Sign-up"}
-                        </Link>
+                        </span>
                     </p>
                 </div>
             </div>

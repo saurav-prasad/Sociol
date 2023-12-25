@@ -11,7 +11,7 @@ function Profile() {
     const dispatch = useDispatch()
     const handelSignout = () => {
         dispatch(signOut())
-        navigate('/signin')
+        navigate('/auth')
     }
     useEffect(()=>{
         if(!user){
@@ -22,7 +22,7 @@ function Profile() {
         <div className='max-w-xl mx-auto'>
             {/* Profile page header */}
             <div className='sm:hidden flex flex-row justify-between items-center px-2 py-1 mb-5 border-b bg-white'>
-                <h1 className='w-full text-left font-bold text-3xl font-[Whisper]'>Sociol</h1>
+                <h1 className='w-full text-left font-bold text-3xl font-[Whisper] select-none'>Sociol</h1>
                 {user && <div>
                     <Power onClick={handelSignout} strokeWidth={3} className='' />
                 </div>}

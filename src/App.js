@@ -1,4 +1,4 @@
-import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
+import { Navigate, RouterProvider, createBrowserRouter, useNavigate } from 'react-router-dom';
 import './App.css';
 import SigninSignup from './components/signinSignup/SigninSignup';
 import SideNavbar from './components/sideNavbar/SideNavbar';
@@ -11,6 +11,7 @@ import { HomeIcon, PlusSquare, } from 'lucide-react';
 import Post from './components/post/Post';
 import UpdateProfile from './components/updateProfile/UpdateProfile';
 import { useSelector } from 'react-redux';
+import Error from './components/error/Error';
 
 function App() {
   const navbarList = [
@@ -46,10 +47,6 @@ function App() {
           element: <SigninSignup />
         },
         {
-          path: "/signin",
-          element: <SigninSignup />
-        },
-        {
           path: "/feed",
           element: <>
             <Post />
@@ -68,16 +65,21 @@ function App() {
           element: < UpdateProfile />
         }
       ]
+    },
+    {
+      path: "/auth",
+      element: <SigninSignup />
+    },
+    {
+      path: '*',
+      element: <Error />
     }
-
   ])
-  const {user} = useSelector((state) => state.authReducer)
-  console.log(user);
+
   return (
     <div className="App relative min-h-screen bg-slate-50 text-gray-900">
       {/* <Test /> */}
-      {/* <BottomNavbar />
-      <SideNavbar /> */}
+      {/* <BottomNavbar />*/}
       <RouterProvider router={router} />
     </div>
   );

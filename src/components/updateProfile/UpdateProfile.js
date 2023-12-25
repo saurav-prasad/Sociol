@@ -1,9 +1,76 @@
-import { Image, UserCircleIcon } from 'lucide-react'
-import React from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { storage } from '../../firebase'
+import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
+import { v4 } from 'uuid'
 
 function UpdateProfile() {
+  const [data, setData] = useState({ name: '', username: '', email: '', phone: '', about: '', bio: '', profilePhoto: '' })
+  const { user } = useSelector(state => state.authReducer)
+  const [error, setError] = useState()
+  const [imageError, setImageError] = useState(false)
+  const [imageUpload, setImageUpload] = useState()
+
+  const fileInputRef = useRef(null);
+  const testImageRef = useRef(null);
+  const navigate = useNavigate()
+
+  const onImageUpload = (e) => {
+    const file = e.target.files[0]
+    if (file && !imageError) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        testImageRef.current.src = e.target.result
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+  const onChange = (e) => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value
+    })
+  }
+  const handleButtonClick = (e) => {
+    e.preventDefault()
+    fileInputRef.current.click();
+  };
+  const onSubmit = async (e) => {
+    e.preventDefault()
+    if (imageUpload) {
+      const imageRef = ref(storage, `images/${imageUpload.name + v4()}`)
+      uploadBytes(imageRef, imageUpload).then((response) => {
+        getDownloadURL(response.ref).then((response) => {
+        
+        })
+      })
+    }
+    
+  }
+
+  useEffect(() => {
+    setData({
+      name: user?.name,
+      username: user?.username,
+      email: user?.email,
+      phone: user?.phone,
+      about: user?.about,
+      bio: user?.bio,
+      profilePhoto: user?.profilePhoto
+    })
+  }, [user])
+
+  const handelImageError = (e) => {
+    setImageError(true)
+    testImageRef.current.src = data.profilePhoto
+  }
+  const onCancel = () => {
+    setData({ name: '', username: '', email: '', phone: '', about: '', bio: '', profilePhoto: '' })
+    navigate(-1)
+  }
   return (
-    <form className='max-w-xl mx-auto pt-8 px-3'>
+    <form onSubmit={onSubmit} className='max-w-xl mx-auto pt-8 px-3'>
       <div className="flex flex-col space-y-8">
         {/* header */}
         <h1 className='text-3xl text-zinc-800 font-semibold'>Update Profile</h1>
@@ -14,18 +81,39 @@ function UpdateProfile() {
           </label>
           <div className="flex items-center gap-x-3">
             <div className='h-24 w-24'>
-              <img className="h-24 w-24 rounded-full object-cover"
-                src='https://media.licdn.com/dms/image/D4D35AQGjCohxNWch7w/profile-framedphoto-shrink_100_100/0/1701414168395?e=1703829600&v=beta&t=HramxGi8yFg0kn5pAZaeu_4hSID3cwCpfjszSUcN1BM'
+              <img className="h-24 w-24 rounded-full border p-1 border-y-purple-600 border-x-violet-500 object-cover"
+                src={data.profilePhoto}
                 alt="dp"
+                onLoad={() => setImageError(false)}
               />
+
+              <img className="hidden"
+                ref={testImageRef}
+                alt="dp"
+                onError={handelImageError}
+                onLoad={() => { setData({ ...data, profilePhoto: testImageRef.current.src }) }}
+              />
+
             </div>
+            <input
+              accept='.png, .jpg, jpeg'
+              className='hidden'
+              type="file"
+              id="fileInput"
+              onChange={onImageUpload}
+              ref={fileInputRef}
+            />
             <button
+              onClick={handleButtonClick}
               type="button"
               className="rounded-md bg-white px-2.5 py-1.5 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
             >
               Change
             </button>
           </div>
+          {imageError && <label className="text-red-600 text-sm font-medium ">
+            Only use .jpg, .png, jpeg format
+          </label>}
         </div>
         {/* username */}
         <div className=''>
@@ -37,11 +125,13 @@ function UpdateProfile() {
               <span className="flex select-none items-center pl-3 text-gray-500 sm:text-sm">socioll.vercel.app/</span>
               <input
                 type="text"
+                value={data.username}
+                onChange={onChange}
                 name="username"
                 id="username"
                 required
                 className="block flex-1 border-0 bg-transparent py-1.5 pl-1 text-gray-900 placeholder:text-gray-400 focus:ring-0 sm:text-sm sm:leading-6"
-                placeholder="janesmith"
+                placeholder="username"
               />
             </div>
           </div>
@@ -55,6 +145,8 @@ function UpdateProfile() {
           <input
             id="name"
             name="name"
+            value={data.name}
+            onChange={onChange}
             type="text"
             required
             placeholder='Enter your name'
@@ -69,7 +161,9 @@ function UpdateProfile() {
           <div className="mt-2">
             <textarea
               id="heading"
-              name="heading"
+              name="about"
+              onChange={onChange}
+              value={data.about}
               rows={2}
               className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               defaultValue={''}
@@ -87,6 +181,8 @@ function UpdateProfile() {
               id="bio"
               name="bio"
               rows={3}
+              value={data.bio}
+              onChange={onChange}
               className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               defaultValue={''}
               placeholder='Write a few sentences about yourself.'
@@ -103,6 +199,8 @@ function UpdateProfile() {
             name="email"
             type="email"
             required
+            value={data.email}
+            onChange={onChange}
             className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             placeholder='Enter your email'
           />
@@ -116,13 +214,19 @@ function UpdateProfile() {
             id="number"
             name="number"
             type="number"
+            value={data.phone}
+            onChange={onChange}
             placeholder='Enter your phone number'
             className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
           />
         </div>
+        {/* errors */}
+        <label className="text-red-600 text-sm font-medium ">
+          {/* error */}
+        </label>
       </div>
-      <div className="mt-7 mb-2 flex items-center justify-end gap-x-6">
-        <button type="button" className="text-sm font-semibold leading-6 text-gray-900">
+      <div className="mt-2 mb-2 flex items-center justify-end gap-x-6">
+        <button onClick={onCancel} type="button" className="text-sm font-semibold leading-6 text-gray-900">
           Cancel
         </button>
         <button
