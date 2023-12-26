@@ -11,6 +11,7 @@ function Profile() {
     const dispatch = useDispatch()
     const handelSignout = () => {
         dispatch(signOut())
+        localStorage.removeItem('auth-token')
         navigate('/auth')
     }
     useEffect(()=>{
@@ -32,7 +33,7 @@ function Profile() {
                 <div className=' flex flex-row justify-start'>
                     {/* profile info */}
                     <div className='flex shrink-0 justify-center items-center mr-3 md:mr-12'>
-                        <img className="md:h-40 md:w-40 h-28 p-1 w-28 rounded-full border border-y-purple-600 border-x-violet-500 object-cover"
+                        <img className="select-none md:h-40 md:w-40 h-28 p-1 w-28 rounded-full border border-y-purple-600 border-x-violet-500 object-cover"
                             src={user?.profilePhoto}
                             alt='profile' />
                     </div>
@@ -51,22 +52,22 @@ function Profile() {
                             </button>
                         </div>
                         {/* follower following posts */}
-                        <div className='hidden md:flex flex-row justify-start space-x-11'>
-                            <p className='font-semibold text-base text-gray-800'>
+                        <div className=' hidden md:flex flex-row justify-start space-x-11'>
+                            <p className='select-none font-semibold text-base text-gray-800'>
                                 2250
-                                <span className='text-base ml-2 font-normal text-zinc-800'>
+                                <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                     Posts
                                 </span>
                             </p>
-                            <p className='font-semibold text-base text-gray-800'>
+                            <p className='select-none font-semibold text-base text-gray-800'>
                                 24
-                                <span className='text-base ml-2 font-normal text-zinc-800'>
+                                <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                     followers
                                 </span>
                             </p>
-                            <p className='font-semibold text-base text-gray-800'>
+                            <p className='select-none font-semibold text-base text-gray-800'>
                                 965
-                                <span className='text-base ml-2 font-normal text-zinc-800'>
+                                <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                     following
                                 </span>
                             </p>

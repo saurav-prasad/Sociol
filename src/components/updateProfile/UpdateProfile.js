@@ -1,52 +1,61 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { storage } from '../../firebase'
-import { getDownloadURL, ref, uploadBytes } from 'firebase/storage'
-import { v4 } from 'uuid'
+import { profile } from '../../axios'
+import uploadImage from '../../firestoreQuery/uploadImage'
+import { updateUser } from '../../features/auth/authSlice'
 
 function UpdateProfile() {
   const [data, setData] = useState({ name: '', username: '', email: '', phone: '', about: '', bio: '', profilePhoto: '' })
   const { user } = useSelector(state => state.authReducer)
+  const dispatch = useDispatch()
   const [error, setError] = useState()
   const [imageError, setImageError] = useState(false)
-  const [imageUpload, setImageUpload] = useState()
-
+  const [profilePhoto, setProfilePhoto] = useState()
   const fileInputRef = useRef(null);
   const testImageRef = useRef(null);
   const navigate = useNavigate()
+  const [updateStatus, setUpdateStatus] = useState(false)
 
-  const onImageUpload = (e) => {
-    const file = e.target.files[0]
-    if (file && !imageError) {
-      const reader = new FileReader()
-      reader.onload = (e) => {
-        testImageRef.current.src = e.target.result
-      }
-      reader.readAsDataURL(file)
-    }
-  }
   const onChange = (e) => {
     setData({
       ...data,
       [e.target.name]: e.target.value
     })
   }
-  const handleButtonClick = (e) => {
-    e.preventDefault()
-    fileInputRef.current.click();
-  };
+
   const onSubmit = async (e) => {
+    setUpdateStatus(true)
+    setError()
     e.preventDefault()
-    if (imageUpload) {
-      const imageRef = ref(storage, `images/${imageUpload.name + v4()}`)
-      uploadBytes(imageRef, imageUpload).then((response) => {
-        getDownloadURL(response.ref).then((response) => {
-        
+    try {
+      let image;
+      if (profilePhoto) { image = await uploadImage(profilePhoto, 'profilePhoto') }
+
+      const updateprofile = await profile.post('/updateprofile',
+        profilePhoto ?
+          { ...data, profilePhoto: image } :
+          {
+            name: data?.name,
+            username: data?.username,
+            email: data?.email,
+            phone: data?.phone,
+            about: data?.about,
+            bio: data?.bio,
+          },
+        {
+          headers: {
+            'auth-token': user.token
+          }
         })
-      })
+      dispatch(updateUser(updateprofile.data.data))
+      navigate('/profile')
+      setUpdateStatus(false)
+    } catch (error) {
+      setUpdateStatus(false)
+      setError(error?.response.data.message)
     }
-    
+
   }
 
   useEffect(() => {
@@ -61,20 +70,44 @@ function UpdateProfile() {
     })
   }, [user])
 
+  const onImageUpload = (e) => {
+    const file = e.target.files[0]
+    setProfilePhoto(file)
+    if (file) {
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        testImageRef.current.src = e.target.result
+      }
+      reader.readAsDataURL(file)
+    }
+  }
+
+  const handleButtonClick = (e) => {
+    e.preventDefault()
+    fileInputRef.current.click();
+  };
+
   const handelImageError = (e) => {
+    setProfilePhoto()
     setImageError(true)
     testImageRef.current.src = data.profilePhoto
   }
+
+  const handelImageLoad = (e) => {
+    setData({ ...data, profilePhoto: testImageRef.current.src })
+  }
+
   const onCancel = () => {
     setData({ name: '', username: '', email: '', phone: '', about: '', bio: '', profilePhoto: '' })
     navigate(-1)
   }
+
   return (
     <form onSubmit={onSubmit} className='max-w-xl mx-auto pt-8 px-3'>
       <div className="flex flex-col space-y-8">
         {/* header */}
         <h1 className='text-3xl text-zinc-800 font-semibold'>Update Profile</h1>
-        {/* dp */}
+        {/* profile photo */}
         <div className="w-full flex flex-col justify-center items-center space-y-3">
           <label htmlFor="photo" className="block text-base font-medium leading-6 text-gray-900 mb-3">
             Profile Photo
@@ -91,7 +124,7 @@ function UpdateProfile() {
                 ref={testImageRef}
                 alt="dp"
                 onError={handelImageError}
-                onLoad={() => { setData({ ...data, profilePhoto: testImageRef.current.src }) }}
+                onLoad={handelImageLoad}
               />
 
             </div>
@@ -111,9 +144,11 @@ function UpdateProfile() {
               Change
             </button>
           </div>
-          {imageError && <label className="text-red-600 text-sm font-medium ">
-            Only use .jpg, .png, jpeg format
-          </label>}
+          {
+            imageError && <label className="text-red-600 text-sm font-medium ">
+              Only use .jpg, .png, jpeg format
+            </label>
+          }
         </div>
         {/* username */}
         <div className=''>
@@ -126,7 +161,7 @@ function UpdateProfile() {
               <input
                 type="text"
                 value={data.username}
-                onChange={onChange}
+                readonly
                 name="username"
                 id="username"
                 required
@@ -137,7 +172,6 @@ function UpdateProfile() {
           </div>
         </div>
         {/* Name */}
-        {/* email */}
         <div>
           <label htmlFor="name" className="block text-base font-medium leading-6 text-gray-900 mb-3">
             Name<span className='text-red-600'>*</span>
@@ -200,7 +234,7 @@ function UpdateProfile() {
             type="email"
             required
             value={data.email}
-            onChange={onChange}
+            readonly
             className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
             placeholder='Enter your email'
           />
@@ -211,8 +245,8 @@ function UpdateProfile() {
             Phone
           </label>
           <input
-            id="number"
-            name="number"
+            id="phone"
+            name="phone"
             type="number"
             value={data.phone}
             onChange={onChange}
@@ -222,18 +256,20 @@ function UpdateProfile() {
         </div>
         {/* errors */}
         <label className="text-red-600 text-sm font-medium ">
-          {/* error */}
+          {error}
         </label>
       </div>
       <div className="mt-2 mb-2 flex items-center justify-end gap-x-6">
-        <button onClick={onCancel} type="button" className="text-sm font-semibold leading-6 text-gray-900">
+        <button disabled={updateStatus} onClick={onCancel} type="button" className="text-sm font-semibold leading-6 text-gray-900">
           Cancel
         </button>
         <button
           type="submit"
-          className="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+          disabled={updateStatus}
+          className="flex justify-center items-center rounded-md bg-indigo-600 px-3 py-1 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 h-9 w-16"
         >
-          Save
+          {updateStatus ? <span className="loader text-[3px] h-[5px] w-[5px]"></span> :
+            'Save'}
         </button>
       </div>
     </form>

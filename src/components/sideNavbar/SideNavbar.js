@@ -11,6 +11,7 @@ function Navbar({ navbarList }) {
     const handelSignOut = () => {
         window.scroll(0, 0)
         dispatch(signOut())
+        localStorage.removeItem('auth-token')
     }
     return (
         <aside className="z-10 h-screen hidden xl:flex fixed w-72 flex-col overflow-y-auto border-r bg-white px-10 py-8">

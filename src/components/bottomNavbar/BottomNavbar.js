@@ -12,6 +12,7 @@ function BottomNavbar({ navbarList }) {
     const handelSignout = () => {
         window.scrollTo(0, 0);
         dispatch(signOut())
+        localStorage.removeItem('auth-token')
     }
     return (
         <aside className="z-10 xl:hidden fixed bottom-0 w-screen border-t bg-white ">
