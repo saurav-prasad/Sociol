@@ -4,37 +4,38 @@ import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import sliceString from '../../sliceString';
 import { Fade } from "react-awesome-reveal";
 
-function PostCard() {
+function PostCard({ profilePhoto, username, about, profileId, id, image, text, like }) {
     const [more, setMore] = useState(false)
     return (
         <div className="flex flex-col rounded-lg py-2 border bg-white mb-10 ">
             {/* user details */}
             <div className='flex items-center justify-start px-3 mb-3'>
                 <img class="inline-block h-10 w-10 object-cover rounded-full border bg-gradient-to-r from-purple-500 to-pink-500"
-                    src="https://media.licdn.com/dms/image/D4D35AQGjCohxNWch7w/profile-framedphoto-shrink_100_100/0/1701414168395?e=1703829600&v=beta&t=HramxGi8yFg0kn5pAZaeu_4hSID3cwCpfjszSUcN1BM" alt="" />
+                    src={profilePhoto} alt="" />
                 <div className='flex ml-2 flex-col justify-center items-sart'>
-                    <p className=' text-left text-md font-semibold'>Saurav</p>
-                    <span className='text-left text-xs text-zinc-600'>Frontend developer</span>
+                    <p className=' text-left text-md font-semibold'>{username}</p>
+                    {about && <span className='text-left text-xs text-zinc-600'>{sliceString(about, 30)}</span>}
                 </div>
             </div>
             {/* Post text */}
-            <div className='text-left mb-3 px-3 transition-all text-md antialiased leading-7 '>
-                {
-                    sliceString(`For most of the year, we thought 2023 was the hardest year for us at leap.club but now looking back, we feel it was the best year, as it taught us so much. We missed our year end target, and as founders and founding team members, we will continue to aim for more. `, more ? 0 : 150)
+            <div className='text-left mb-3 px-3 transition-all text-md antialiased leading-[1.59rem] '>
+                {text &&
+                    sliceString(text, more ? 0 : 150)
                 }
-                {<span onClick={() => { setMore(!more) }} className='whitespace-nowrap select-none cursor-pointer text-xs px-2 py-1 text-center'>&nbsp;&nbsp; Read {more ? 'less' : 'more'}</span>}
+                {(text && text.length > 150) &&
+                    <span onClick={() => { setMore(!more) }} className='whitespace-nowrap select-none cursor-pointer text-xs px-2 py-1 text-center'>&nbsp;&nbsp; Read {more ? 'less' : 'more'}</span>}
 
             </div>
             {/* Post image */}
             <Fade duration={250} direction='top' triggerOnce={true}>
-                <img
-                    src="https://media.licdn.com/dms/image/D5622AQFnFsyjB-B_Pw/feedshare-shrink_2048_1536/0/1703221649492?e=1706140800&v=beta&t=Zxqj4vP83RhUN-6p7kJlXKOFZyE9abdKm1lXGWBcs5Q"
+                {image && <img
+                    src={image}
                     alt="Post"
                     className="h-auto w-full object-contain"
-                />
+                />}
             </Fade>
             {/* Like and comment */}
-            <div className='flex justify-around mt-3 border-y'>
+            <div className='flex justify-around pt-2 border-y'>
                 <div className='select-none p-2 flex items-center cursor-pointer text-blue-600'>
                     <ThumbUpRoundedIcon fontSize='medium' className='scale-x-[-1]' />
                     <span className='font-medium ml-1 text-sm'>Like</span>
@@ -47,12 +48,12 @@ function PostCard() {
             </div>
             {/* total likes */}
             <div className='flex flex-col px-2 mt-3'>
-                <span className='w-full text-left text-base font-semibold text-slate-700'>56
+                <span className='w-full text-left text-base font-semibold text-slate-700'>{like}
                     <span className='text-base font-medium ml-2 text-slate-500'>Likes</span>
                 </span>
             </div>
             {/* write a comment */}
-            <div className='flex mt-3 flex-row items-start px-2'>
+            {/* <div className='flex mt-3 flex-row items-start px-2'>
                 <div className='mr-2 flex-shrink-0'>
                     <img
                         className='rounded-full w-10 h-10'
@@ -77,9 +78,9 @@ function PostCard() {
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> */}
             {/* comments */}
-            <div className='flex mt-3 flex-row items-start px-2'>
+            {/* <div className='flex mt-3 flex-row items-start px-2'>
                 <div className='mr-2 flex-shrink-0'>
                     <img
                         className='rounded-full w-10 h-10'
@@ -91,7 +92,7 @@ function PostCard() {
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique aspernatur earum nostrum omnis minima quae incidunt nobis blanditiis sed maxime?
                     </p>
                 </div>
-            </div>
+            </div> */}
         </div>
     )
 }

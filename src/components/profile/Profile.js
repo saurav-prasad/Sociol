@@ -1,24 +1,48 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PostCard from '../postCard/PostCard'
 import { Power } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { signOut } from '../../features/auth/authSlice'
+import sortArray from '../../sortArray'
+import { selectSortedPosts } from '../../features/post/postSlice'
+import { post } from '../../axios'
 
 function Profile() {
     const navigate = useNavigate()
     const { user } = useSelector(state => state.authReducer)
+    const posts = useSelector(state => state.postReducer)
     const dispatch = useDispatch()
+    const [postsData, setPostsData] = useState([])
+
+    // const posts = useSelector(selectSortedPosts);
+
+
     const handelSignout = () => {
         dispatch(signOut())
         localStorage.removeItem('auth-token')
         navigate('/auth')
     }
-    useEffect(()=>{
-        if(!user){
+
+    useEffect(() => {
+        if (!user) {
             navigate('/signin')
         }
     })
+    useEffect(() => {
+        async function fetchUser() {
+            console.log("object");
+            let fetchPosts = await post.get('/fetchpost', {
+                headers: {
+                    'auth-token': user?.token
+                }
+            })
+            fetchPosts = sortArray(fetchPosts.data.data)
+            setPostsData(fetchPosts)
+        }
+        fetchUser()
+    }, [])
+
     return (
         <div className='max-w-xl mx-auto'>
             {/* Profile page header */}
@@ -112,10 +136,21 @@ function Profile() {
             </div>
             {/* Profile posts */}
             <div className='flex flex-col mt-7 px-2 sm:px-6'>
-                <PostCard />
-                <PostCard />
-                <PostCard />
-                <PostCard />
+                {
+                    postsData.map(data => {
+                        return (data?.profileId === user?.profileId) && <PostCard
+                            profilePhoto={data.profilePhoto}
+                            username={data.username}
+                            about={data?.about}
+                            profileId={data.profileId}
+                            id={data.id}
+                            image={data?.image}
+                            text={data?.text}
+                            like={data?.like}
+                            key={data.key}
+                        />
+                    })
+                }
             </div>
         </div>
     )

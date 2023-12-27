@@ -37,7 +37,7 @@ function App() {
       }
     }
     fetchUser()
-  })
+  }, [])
 
   const navbarList = [
     {

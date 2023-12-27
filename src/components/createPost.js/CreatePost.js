@@ -1,16 +1,32 @@
 import { Image } from 'lucide-react'
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { post } from '../../axios'
+import uploadImage from '../../firestoreQuery/uploadImage'
+import { updatePost } from '../../features/post/postSlice'
 
 function CreatePost() {
     const [image, setImage] = useState()
+    const [data, setData] = useState({ text: '', image: '', profileId: '', userId: '' })
+    const { user } = useSelector(state => state.authReducer)
+    const imageRef = useRef(null)
+    const navigate = useNavigate()
+    const [error, setError] = useState()
+    const [submitStatus, setSubmitStatus] = useState(false)
+    const dispatch = useDispatch()
+    const posts = useSelector(state => state.postReducer)
+
     const onImageUpload = (e) => {
-        console.log(e);
         const file = e.target.files[0]
+        setData({
+            ...data,
+            image: file
+        })
         if (file) {
             const reader = new FileReader()
             reader.onload = (e) => {
                 setImage(e.target.result)
-                console.log(e);
             }
             reader.readAsDataURL(file)
         }
@@ -18,18 +34,75 @@ function CreatePost() {
             setImage()
         }
     }
-    
+
+    const onChange = (e) => {
+        setError()
+        setData({
+            ...data,
+            [e.target.name]: e.target.value
+        })
+    }
+
+    const onSubmit = async (e) => {
+        e.preventDefault()
+        setError()
+        setSubmitStatus(true)
+        try {
+            // console.log(data);
+            let uploadedimage;
+            if (image) {
+                uploadedimage = await uploadImage(data.image, 'post')
+            }
+            const createPost = await post.post('/createpost', image ? {
+                userId: user?.userId,
+                profileId: user?.profileId,
+                text: data.text,
+                image: uploadedimage
+            } : {
+                userId: user?.userId,
+                profileId: user?.profileId,
+                text: data.text
+            }, {
+                headers: {
+                    'auth-token': user.token
+                }
+            })
+            // console.log(createPost)
+            dispatch(updatePost(createPost))
+            navigate('/profile')
+            setSubmitStatus(false)
+        } catch (error) {
+            console.log(error);
+            setError(error?.response?.data?.message)
+            setSubmitStatus(false)
+        }
+
+    }
+    const onImageLoadError = () => {
+        setData({ ...data, image: '' })
+        imageRef.current.src = "https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png"
+        setImage()
+    }
+
+    useEffect(() => {
+        setData({
+            userId: user?.userId,
+            profileId: user?.profileId
+        })
+    }, [user])
+
     return (
         <div className='max-w-md mx-auto px-1  '>
             <h1 className='text-3xl font-semibold pt-5 mb-10'>Create a post</h1>
             <div className="col-span-full mb-7">
-                <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
+                <label htmlFor="text" className="block text-sm font-medium leading-6 text-gray-900">
                     Write about your post
                 </label>
                 <div className="mt-2">
                     <textarea
-                        id="about"
-                        name="about"
+                        id="text"
+                        name="text"
+                        onChange={onChange}
                         rows={5}
                         className="block bg w-full bg-slate-100 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
                         defaultValue={''}
@@ -56,7 +129,8 @@ function CreatePost() {
                     <p className="text-xs leading-5 text-gray-600">PNG, JPG, GIF</p>
                 </div>}
                 {image && <img
-                    onError={()=>{setImage("https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png")}}
+                    onError={onImageLoadError}
+                    ref={imageRef}
                     className='object-contain h-full w-full max-h-96'
                     src={image}
                     alt="Not found" />
@@ -64,25 +138,38 @@ function CreatePost() {
                 }
             </div>
             {image && <button
-                onClick={(e) => { setImage(); e.preventDefault() }}
+                onClick={(e) => { setImage(); e.preventDefault(); setData({ ...data, image: '' }) }}
                 type="button"
                 className="rounded-md mt-5 bg-red-500 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-600/80 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600"
             >
                 Delete image
             </button>}
-            <div className='w-full flex justify-between items-center mt-5 mb-3'>
-                <button
-                    type="button"
-                    className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
-                >
-                    Cancel
-                </button>
-                <button
-                    type="button"
-                    className=" rounded-md bg-indigo-600  px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900"
-                >
-                    Create a Post
-                </button>
+            <div className='mt-5'>
+                <label className="text-red-600 text-sm font-medium ">
+                    {error}
+                </label>
+                <div className='w-full flex justify-between items-center mt-2 mb-3'>
+                    <button
+                        type="button"
+                        className="rounded-md border border-black px-3 py-2 text-sm font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black"
+                        onClick={() => { navigate(-1); }}
+                    >
+                        Cancel
+                    </button>
+                    {/* <button
+                        type="submit"
+                        onClick={onSubmit}
+                        className=" rounded-md bg-indigo-600 h-10 w-24 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-900"
+                    > */}
+                    <button
+                        type="submit"
+                        onClick={onSubmit}
+                        className="cursor-pointer flex mt-5 w-28 justify-center items-center rounded-md h-9 bg-blue-600 px-3 py-1.5 text-sm font-medium leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    >
+                        {submitStatus ? <span className="loader text-[3px] h-[5px] w-[5px]"></span> :
+                            'Create a Post'}
+                    </button>
+                </div>
             </div>
         </div>
     )

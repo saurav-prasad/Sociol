@@ -9,12 +9,13 @@ export const authSlice = createSlice({
     initialState,
     reducers: {
         signIn: (state, action) => {
+            // console.log(state);
             const user = {
                 ...state.user,
                 ...action.payload,
                 key: nanoid(),
             }
-            console.log(user);
+            // console.log(user);
             state.user = { ...user }
         },
         updateUser: (state, action) => {
