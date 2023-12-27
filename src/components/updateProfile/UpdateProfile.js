@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { profile } from '../../axios'
 import uploadImage from '../../firestoreQuery/uploadImage'
 import { updateUser } from '../../features/auth/authSlice'
+import deleteImage from '../../firestoreQuery/deleteImage'
 
 function UpdateProfile() {
   const [data, setData] = useState({ name: '', username: '', email: '', phone: '', about: '', bio: '', profilePhoto: '' })
@@ -30,7 +31,10 @@ function UpdateProfile() {
     e.preventDefault()
     try {
       let image;
-      if (profilePhoto) { image = await uploadImage(profilePhoto, 'profilePhoto') }
+      if (profilePhoto) {
+        await deleteImage(user.profilePhoto, 'profilePhoto')
+        image = await uploadImage(profilePhoto, 'profilePhoto')
+      }
 
       const updateprofile = await profile.post('/updateprofile',
         profilePhoto ?
@@ -52,8 +56,9 @@ function UpdateProfile() {
       navigate('/profile')
       setUpdateStatus(false)
     } catch (error) {
+      console.log(error);
       setUpdateStatus(false)
-      setError(error?.response.data.message)
+      setError(error?.response?.data?.message)
     }
 
   }
@@ -68,6 +73,7 @@ function UpdateProfile() {
       bio: user?.bio,
       profilePhoto: user?.profilePhoto
     })
+
   }, [user])
 
   const onImageUpload = (e) => {
