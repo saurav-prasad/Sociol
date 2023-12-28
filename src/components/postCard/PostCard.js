@@ -3,10 +3,32 @@ import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import sliceString from '../../sliceString';
 import { Fade } from "react-awesome-reveal";
-import { MoreHorizontal } from 'lucide-react';
+import { MoreHorizontal, X } from 'lucide-react';
+import { useDispatch, useSelector } from 'react-redux';
+import { deletePost } from '../../features/post/postSlice';
+import { post } from '../../axios';
 
-function PostCard({ profilePhoto, username, about, profileId, id, image, text, like }) {
+function PostCard({ profilePhoto, username, about, profileId, postKey, id, image, text, like }) {
     const [more, setMore] = useState(false)
+    const [toggleOpen, settoggleOpen] = useState(false)
+    const dispatch = useDispatch()
+    const { user } = useSelector(state => state.authReducer)
+
+    const onUpdate = () => {
+
+    }
+    const onDelete = async () => {
+        try {
+            await post.delete(`/deletepost/${id}`, {
+                headers: {
+                    'auth-token': user.token
+                }
+            })
+            dispatch(deletePost({ key: postKey }))
+        } catch (error) {
+            console.log(error);
+        }
+    }
     return (
         <div className="flex flex-col rounded-lg py-2 border bg-white mb-10 ">
             {/* user details */}
@@ -19,7 +41,27 @@ function PostCard({ profilePhoto, username, about, profileId, id, image, text, l
                         {about && <span className='text-left text-xs text-zinc-600'>{sliceString(about, 30)}</span>}
                     </div>
                 </div>
-                <MoreHorizontal className='cursor-pointer'/>
+                {/* menu */}
+                {profileId === user?.profileId &&
+                    <div className='relative'>
+                        <MoreHorizontal onClick={() => settoggleOpen(!toggleOpen)} className='cursor-pointer' />
+                        {toggleOpen &&
+                            <div className={`absolute right-0 top-0 transition ease-in-out z-10 `}>
+                                <div className='relative w-32 flex flex-col justify-start items-center divide-y divide-gray-300 bg-slate-100 rounded'>
+                                    <div className='w-full text-left px-2 py-2  '>
+                                        <div className='flex flex-row items-center'>
+                                            <span onClick={onUpdate} className='w-full select-none font-medium text-gray-700'>Update</span>
+                                            <X onClick={() => settoggleOpen(!toggleOpen)} size={28} className='z-10 right-0 top-0 cursor-pointer' />
+                                        </div>
+                                    </div>
+                                    <div className='w-full text-left px-2 py-2 '>
+                                        <span onClick={onDelete} className='w-full select-none font-medium text-gray-700'>Delete</span>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
             {/* Post text */}
             <div className='text-left mb-3 px-3 transition-all text-md antialiased leading-[1.59rem] '>

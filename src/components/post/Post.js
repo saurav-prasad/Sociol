@@ -1,15 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import PostCard from '../postCard/PostCard'
-import { useDispatch, useSelector } from 'react-redux'
+import {  useSelector } from 'react-redux'
 import sortArray from '../../sortArray'
 
 function Post() {
-    const dispatch = useDispatch()
 
     const [postsData, setPostsData] = useState([])
     const posts = useSelector(state => state.postReducer)
     useEffect(() => {
-         const a = sortArray(posts)
+        const a = sortArray(posts)
         setPostsData(a)
     }, [posts])
 
@@ -34,9 +33,12 @@ function Post() {
                         about={data?.about}
                         profileId={data.profileId}
                         id={data.id}
+                        postKey={data.key}
                         image={data?.image}
                         text={data?.text}
-                        like={data?.like} />
+                        like={data?.like}
+                        key={data.key}
+                    />
                 )
             }
         </div>

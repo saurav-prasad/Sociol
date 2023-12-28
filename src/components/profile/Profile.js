@@ -5,8 +5,6 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { signOut } from '../../features/auth/authSlice'
 import sortArray from '../../sortArray'
-import { selectSortedPosts } from '../../features/post/postSlice'
-import { post } from '../../axios'
 
 function Profile() {
     const navigate = useNavigate()
@@ -152,6 +150,7 @@ function Profile() {
                             text={data?.text}
                             like={data?.like}
                             key={data.key}
+                            postKey={data.key}
                         />
                     })
                 }

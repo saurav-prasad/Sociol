@@ -14,12 +14,11 @@ export const postSlice = createSlice({
             state.push(...posts);
         },
         deletePost: (state, action) => {
-            state = state.filter((data) =>
-                data.key !== action.payload.key
-            )
+            const newState = state.filter((data) => data.key !== action.payload.key);
+            return newState
         },
         addPost: (state, action) => {
-            const post = { 
+            const post = {
                 ...action.payload,
                 key: nanoid()
             }
