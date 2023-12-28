@@ -30,18 +30,22 @@ function Profile() {
         }
     })
     useEffect(() => {
-        async function fetchUser() {
-            console.log("object");
-            let fetchPosts = await post.get('/fetchpost', {
-                headers: {
-                    'auth-token': user?.token
-                }
-            })
-            fetchPosts = sortArray(fetchPosts.data.data)
-            setPostsData(fetchPosts)
-        }
-        fetchUser()
-    }, [])
+        const a = sortArray(posts)
+        setPostsData(a)
+    }, [posts])
+
+    // useEffect(() => {
+    //     async function fetchUser() {
+    //         let fetchPosts = await post.get('/fetchpost', {
+    //             headers: {
+    //                 'auth-token': user?.token
+    //             }
+    //         })
+    //         fetchPosts = sortArray(fetchPosts.data.data)
+    //         setPostsData(fetchPosts)
+    //     }
+    //     fetchUser()
+    // }, [])
 
     return (
         <div className='max-w-xl mx-auto'>

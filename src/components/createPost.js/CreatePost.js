@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { post } from '../../axios'
 import uploadImage from '../../firestoreQuery/uploadImage'
-import { updatePost } from '../../features/post/postSlice'
+import { addPost, updatePost } from '../../features/post/postSlice'
 
 function CreatePost() {
     const [image, setImage] = useState()
@@ -67,8 +67,7 @@ function CreatePost() {
                     'auth-token': user.token
                 }
             })
-            // console.log(createPost)
-            dispatch(updatePost(createPost))
+            dispatch(addPost(createPost.data.data))
             navigate('/profile')
             setSubmitStatus(false)
         } catch (error) {

@@ -3,19 +3,23 @@ import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import sliceString from '../../sliceString';
 import { Fade } from "react-awesome-reveal";
+import { MoreHorizontal } from 'lucide-react';
 
 function PostCard({ profilePhoto, username, about, profileId, id, image, text, like }) {
     const [more, setMore] = useState(false)
     return (
         <div className="flex flex-col rounded-lg py-2 border bg-white mb-10 ">
             {/* user details */}
-            <div className='flex items-center justify-start px-3 mb-3'>
-                <img class="inline-block h-10 w-10 object-cover rounded-full border bg-gradient-to-r from-purple-500 to-pink-500"
-                    src={profilePhoto} alt="" />
-                <div className='flex ml-2 flex-col justify-center items-sart'>
-                    <p className=' text-left text-md font-semibold'>{username}</p>
-                    {about && <span className='text-left text-xs text-zinc-600'>{sliceString(about, 30)}</span>}
+            <div className='flex items-center justify-between px-3 mb-3'>
+                <div className='flex items-center justify-start'>
+                    <img class="inline-block h-10 w-10 object-cover rounded-full border bg-gradient-to-r from-purple-500 to-pink-500"
+                        src={profilePhoto} alt="" />
+                    <div className='flex ml-2 flex-col justify-center items-sart'>
+                        <p className=' text-left text-md font-semibold'>{username}</p>
+                        {about && <span className='text-left text-xs text-zinc-600'>{sliceString(about, 30)}</span>}
+                    </div>
                 </div>
+                <MoreHorizontal className='cursor-pointer'/>
             </div>
             {/* Post text */}
             <div className='text-left mb-3 px-3 transition-all text-md antialiased leading-[1.59rem] '>

@@ -19,7 +19,7 @@ export const postSlice = createSlice({
             )
         },
         addPost: (state, action) => {
-            const post = {
+            const post = { 
                 ...action.payload,
                 key: nanoid()
             }
@@ -31,18 +31,6 @@ export const postSlice = createSlice({
     }
 })
 
-
-
-// New selector to sort posts
-export const selectPosts = state => state.postReducer;
-
-export const selectSortedPosts = createSelector(
-    [selectPosts],
-    (posts) =>
-        posts
-            .slice() // Create a shallow copy to avoid mutating the original array
-            .sort((a, b) => b.timestamp.localeCompare(a.timestamp)) // Sort posts by timestamp in descending order
-);
 
 
 export const { createPost, deletePost, addPost, updatePost } = postSlice.actions

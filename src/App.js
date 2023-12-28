@@ -14,8 +14,10 @@ import Auth from './components/signinSignup/Auth';
 import SigninSignup from './components/signinSignup/SigninSignup';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { auth } from './axios';
+import { auth, post } from './axios';
 import { signIn } from './features/auth/authSlice';
+import sortArray from './sortArray';
+import { createPost } from './features/post/postSlice';
 
 function App() {
   const dispatch = useDispatch()
@@ -38,6 +40,16 @@ function App() {
     }
     fetchUser()
   }, [])
+
+
+  useEffect(() => {
+    async function fetchUser() {
+      let fetchPosts = await post.get('/getallpost')
+      dispatch(createPost(fetchPosts?.data?.data))
+    }
+    fetchUser()
+  }, [])
+
 
   const navbarList = [
     {
