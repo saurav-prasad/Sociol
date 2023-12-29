@@ -38,6 +38,8 @@ function Post() {
                         text={data?.text}
                         like={data?.like}
                         key={data.key}
+                        timestamp={data.timestamp}
+                        comment={data.comment}
                     />
                 )
             }

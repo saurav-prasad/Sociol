@@ -151,6 +151,8 @@ function Profile() {
                             like={data?.like}
                             key={data.key}
                             postKey={data.key}
+                            timestamp={data.timestamp}
+                            comment={data.comment}
                         />
                     })
                 }

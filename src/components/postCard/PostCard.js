@@ -5,17 +5,54 @@ import sliceString from '../../sliceString';
 import { Fade } from "react-awesome-reveal";
 import { MoreHorizontal, X } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
-import { deletePost } from '../../features/post/postSlice';
-import { post } from '../../axios';
+import { deletePost, updatePost } from '../../features/post/postSlice';
+import { liked, post } from '../../axios';
 import { useNavigate } from 'react-router-dom';
+import CommentBox from '../commentBox/CommentBox';
+import Comment from '../comments/Comment';
 
-function PostCard({ profilePhoto, username, about, profileId, postKey, id, image, text, like }) {
+const timePassed = (timestamp,) => {
+    const startDateTime = new Date(timestamp);
+    const currentDateTime = new Date();
+
+    // Calculate the time difference in milliseconds
+    const timeDifference = currentDateTime - startDateTime;
+
+    // Convert milliseconds to seconds, minutes, hours, days, months, and years
+    const totalSeconds = Math.floor(timeDifference / 1000);
+    const totalMinutes = Math.floor(totalSeconds / 60);
+    const totalHours = Math.floor(totalMinutes / 60);
+    const totalDays = Math.floor(totalHours / 24);
+    const totalMonths = Math.floor(totalDays / 30); // Assuming a month has approximately 30 days
+    const totalYears = Math.floor(totalDays / 365); // Assuming a year has approximately 365 days
+
+    // Determine the appropriate unit and value
+    let formattedTime;
+    if (totalSeconds < 60) {
+        formattedTime = `${totalSeconds} sec${totalSeconds !== 1 ? 's' : ''}`;
+    } else if (totalMinutes < 60) {
+        formattedTime = `${totalMinutes} min${totalMinutes !== 1 ? 's' : ''}`;
+    } else if (totalHours < 24) {
+        formattedTime = `${totalHours} hr${totalHours !== 1 ? 's' : ''}`;
+    } else if (totalDays < 30) {
+        formattedTime = `${totalDays} dy${totalDays !== 1 ? 's' : ''}`;
+    } else if (totalMonths < 12) {
+        formattedTime = `${totalMonths} mo${totalMonths !== 1 ? 's' : ''}`;
+    } else {
+        formattedTime = `${totalYears} yr${totalYears !== 1 ? 's' : ''}`;
+    }
+    return formattedTime
+}
+
+function PostCard({ profilePhoto, username, about, profileId, postKey, id, image, text, like, comment, timestamp }) {
     const [more, setMore] = useState(false)
     const [toggleOpen, settoggleOpen] = useState(false)
     const dispatch = useDispatch()
     const { user } = useSelector(state => state.authReducer)
     const navigate = useNavigate()
     const [postImage, setPostImage] = useState()
+    const [ifLiked, setIfLiked] = useState(false)
+    const [toggleComment, setToggleComment] = useState(false)
 
     const onUpdate = () => {
         navigate(`/updatepost/${id}`)
@@ -33,8 +70,49 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
             console.log(error);
         }
     }
+
+    const onLikeClick = async () => {
+        try {
+            if (ifLiked) {
+                const unlike = await liked.get(`/unlike/${id}`, {
+                    headers: {
+                        "auth-token": user.token
+                    }
+                })
+                unlike.data.data.unLiked && dispatch(updatePost({ _id: id, like: like - 1 }))
+                setIfLiked(false)
+            }
+            else if (!ifLiked) {
+                const likePost = await liked.get(`/like/${id}`, {
+                    headers: {
+                        "auth-token": user.token
+                    }
+                })
+                likePost.data.data.liked && dispatch(updatePost({ _id: id, like: like + 1 }))
+                setIfLiked(true)
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
     useEffect(() => {
-        image && setPostImage(image)
+        async function fetchData() {
+            image && setPostImage(image)
+            try {
+
+                const checkLiked = await liked.get(`/iflike/${id}`, {
+                    headers: {
+                        'auth-token': user.token
+                    }
+                })
+                setIfLiked(checkLiked.data.data.liked)
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchData()
     }, [image])
 
     return (
@@ -84,70 +162,44 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
             <Fade duration={250} direction='top' triggerOnce={true}>
                 {postImage && <img
                     src={postImage}
-                    onError={()=>setPostImage()}
+                    onError={() => setPostImage()}
                     alt="Post"
                     className="h-auto w-full object-contain"
                 />}
             </Fade>
+            {/* total likes */}
+            <div className='flex flex-row items-center justify-between px-2 mt-3'>
+                <div>
+                    <span className='w-full mr-2 text-left text-base font-semibold text-slate-700'>{like}
+                        <span className='text-xs font-medium ml-1 text-slate-500'>Likes</span>
+                    </span>
+                    <span className='w-full text-left text-base font-semibold text-slate-700'>{comment}
+                        <span className='text-xs font-medium ml-1 text-slate-500'>Comments</span>
+                    </span>
+                </div>
+                <span className='text-xs font-medium ml-2 text-slate-500'>{timePassed(timestamp)}</span>
+            </div>
             {/* Like and comment */}
-            <div className='flex justify-around pt-2 border-y'>
-                <div className='select-none p-2 flex items-center cursor-pointer text-blue-600'>
+            <div className='flex justify-around pt-1 border-t'>
+                <div onClick={onLikeClick} className={`select-none p-2 flex items-center cursor-pointer  ${ifLiked ? 'text-blue-600' : 'text-zinc-500'}`}>
                     <ThumbUpRoundedIcon fontSize='medium' className='scale-x-[-1]' />
                     <span className='font-medium ml-1 text-sm'>Like</span>
                 </div>
 
-                <div className='select-none p-2 flex items-center cursor-pointer  text-zinc-500'>
+                <div onClick={() => setToggleComment(!toggleComment)} className='select-none p-2 flex items-center cursor-pointer  text-zinc-500'>
                     <CommentRoundedIcon fontSize='medium' className='' />
                     <span className='font-medium text-sm ml-1'>Comment</span>
                 </div>
             </div>
-            {/* total likes */}
-            <div className='flex flex-col px-2 mt-3'>
-                <span className='w-full text-left text-base font-semibold text-slate-700'>{like}
-                    <span className='text-base font-medium ml-2 text-slate-500'>Likes</span>
-                </span>
-            </div>
-            {/* write a comment */}
-            {/* <div className='flex mt-3 flex-row items-start px-2'>
-                <div className='mr-2 flex-shrink-0'>
-                    <img
-                        className='rounded-full w-10 h-10'
-                        src="https://media.licdn.com/dms/image/D4D35AQGjCohxNWch7w/profile-framedphoto-shrink_100_100/0/1701414168395?e=1703768400&v=beta&t=HGBJKIZQdj5kBdKi4cf1ISDngldbLcMeR3gu6SzYhIw" alt="" />
-                </div>
-                <div className='w-full flex flex-col'>
-                    <textarea
-                        className='w-full border-b outline-0 text-base'
-                        placeholder='Add a comment' name="" id="" cols="30" rows="2"></textarea>
-                    <div className='flex justify-between mt-2'>
-                        <button
-                            type="button"
-                            className="h-7 rounded-md border border-black px-3 py-1 text-xs font-semibold text-black shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black hover:bg-slate-100"
-                        >
-                            Cancel
-                        </button>
-                        <button
-                            type="button"
-                            className="h-7 rounded-md bg-sky-500  px-5 py-1 text-xs md:text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900"
-                        >
-                            Post
-                        </button>
-                    </div>
-                </div>
-            </div> */}
-            {/* comments */}
-            {/* <div className='flex mt-3 flex-row items-start px-2'>
-                <div className='mr-2 flex-shrink-0'>
-                    <img
-                        className='rounded-full w-10 h-10'
-                        src="https://media.licdn.com/dms/image/D4D35AQGjCohxNWch7w/profile-framedphoto-shrink_100_100/0/1701414168395?e=1703768400&v=beta&t=HGBJKIZQdj5kBdKi4cf1ISDngldbLcMeR3gu6SzYhIw" alt="" />
-                </div>
-                <div className='w-full '>
-                    <p className='text-left text-slate-800'>
-                        <span className='text-left mr-2 font-medium text-slate-900'>Saurav</span>
-                        Lorem ipsum dolor sit amet consectetur adipisicing elit. Similique aspernatur earum nostrum omnis minima quae incidunt nobis blanditiis sed maxime?
-                    </p>
-                </div>
-            </div> */}
+            {
+                toggleComment &&
+                <>
+                    {/* write a comment */}
+                    <CommentBox profileId={profileId} postId={id} profilePhoto={profilePhoto} username={username} />
+                    {/* comments */}
+                    <Comment postId={id} profileId={profileId} />
+                </>
+            }
         </div>
     )
 }
