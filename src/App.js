@@ -18,6 +18,7 @@ import { auth, post } from './axios';
 import { signIn } from './features/auth/authSlice';
 import sortArray from './sortArray';
 import { createPost } from './features/post/postSlice';
+import UpdatePost from './components/updatePost/UpdatePost';
 
 function App() {
   const dispatch = useDispatch()
@@ -87,6 +88,10 @@ function App() {
         {
           path: "/createpost",
           element: <CreatePost />
+        },
+        {
+          path: "/updatepost/:postid",
+          element: <UpdatePost />
         },
         {
           path: "/profile",

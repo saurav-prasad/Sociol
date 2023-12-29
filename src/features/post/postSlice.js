@@ -25,7 +25,12 @@ export const postSlice = createSlice({
             state.push(post)
         },
         updatePost: (state, action) => {
-            state = state.map((data) => (data.key === action.payload.key ? { ...data, ...action.payload } : data));
+            const newState = state.map((data) => (data.id === action.payload._id ?
+                {
+                    ...data,
+                    ...action.payload
+                } : data));
+            return newState;
         }
     }
 })

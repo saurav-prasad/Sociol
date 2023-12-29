@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import sliceString from '../../sliceString';
@@ -7,16 +7,20 @@ import { MoreHorizontal, X } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deletePost } from '../../features/post/postSlice';
 import { post } from '../../axios';
+import { useNavigate } from 'react-router-dom';
 
 function PostCard({ profilePhoto, username, about, profileId, postKey, id, image, text, like }) {
     const [more, setMore] = useState(false)
     const [toggleOpen, settoggleOpen] = useState(false)
     const dispatch = useDispatch()
     const { user } = useSelector(state => state.authReducer)
+    const navigate = useNavigate()
+    const [postImage, setPostImage] = useState()
 
     const onUpdate = () => {
-
+        navigate(`/updatepost/${id}`)
     }
+
     const onDelete = async () => {
         try {
             await post.delete(`/deletepost/${id}`, {
@@ -29,6 +33,10 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
             console.log(error);
         }
     }
+    useEffect(() => {
+        image && setPostImage(image)
+    }, [image])
+
     return (
         <div className="flex flex-col rounded-lg py-2 border bg-white mb-10 ">
             {/* user details */}
@@ -74,8 +82,9 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
             </div>
             {/* Post image */}
             <Fade duration={250} direction='top' triggerOnce={true}>
-                {image && <img
-                    src={image}
+                {postImage && <img
+                    src={postImage}
+                    onError={()=>setPostImage()}
                     alt="Post"
                     className="h-auto w-full object-contain"
                 />}
