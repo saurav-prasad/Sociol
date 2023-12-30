@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { addComment } from '../../features/comment/commentSlice';
 import { comment } from '../../axios';
+import { updatePost } from '../../features/post/postSlice';
 
-function CommentBox({ profilePhoto, profileId, username, postId }) {
+function CommentBox({ profilePhoto, profileId, username, postId, }) {
     const dispatch = useDispatch()
     const { user } = useSelector(state => state.authReducer)
     const [data, setData] = useState({ comment: '' })
+    const textareaRef = useRef(null)
+    const posts = useSelector(state => state.postReducer)
 
     const onChange = (e) => {
         e.target.style.height = 'auto';
@@ -16,16 +19,31 @@ function CommentBox({ profilePhoto, profileId, username, postId }) {
         })
     }
 
+
+
     const onSubmit = async (e) => {
         e.preventDefault()
         try {
-            const commentData = await comment.post(`/createcomment/${postId}`, {
-                comment: data.comment
-            }, { headers: { 'auth-token': user.token } })
-            console.log(commentData.data.data);
+            if (data.comment.length >= 1) {
+                // creating the comment in database
+                const commentData = await comment.post(`/createcomment/${postId}`, {
+                    comment: data.comment
+                }, { headers: { 'auth-token': user.token } })
+                console.log(commentData);
+                dispatch(addComment([postId, { comment: commentData.data.data }]))
 
-            //  dispatch(addComment({ profileId, postId: postId, comment: commentData.data.data }))
-            setData({ comment: '' })
+                // updating comment count
+                let commentCount = 0
+                posts.forEach(element => {
+                    if (element.id === postId) {
+                        commentCount = element.comment
+                    }
+                });
+                dispatch(updatePost({ _id: postId, comment: commentCount + 1 }))
+
+                setData({ comment: '' })
+                textareaRef.current.style.height = '30px'
+            }
         } catch (error) {
             console.log(error);
         }
@@ -39,6 +57,7 @@ function CommentBox({ profilePhoto, profileId, username, postId }) {
             </div>
             <div className='w-full flex flex-row items-end border-b'>
                 <textarea
+                    ref={textareaRef}
                     name='comment'
                     value={data.comment}
                     onChange={onChange}

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import ThumbUpRoundedIcon from '@mui/icons-material/ThumbUpRounded';
 import CommentRoundedIcon from '@mui/icons-material/CommentRounded';
 import sliceString from '../../sliceString';
-import { Fade } from "react-awesome-reveal";
+import {  Slide } from "react-awesome-reveal";
 import { MoreHorizontal, X } from 'lucide-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { deletePost, updatePost } from '../../features/post/postSlice';
@@ -99,6 +99,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
 
     useEffect(() => {
         async function fetchData() {
+            // setting the post image if available
             image && setPostImage(image)
             try {
 
@@ -116,6 +117,8 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
     }, [image])
 
     return (
+        <Slide direction='up' duration={250} triggerOnce cascade damping={1}>
+
         <div className="flex flex-col rounded-lg py-2 border bg-white mb-10 ">
             {/* user details */}
             <div className='flex items-center justify-between px-3 mb-3'>
@@ -159,14 +162,12 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
 
             </div>
             {/* Post image */}
-            <Fade duration={250} direction='top' triggerOnce={true}>
                 {postImage && <img
                     src={postImage}
                     onError={() => setPostImage()}
                     alt="Post"
                     className="h-auto w-full object-contain"
                 />}
-            </Fade>
             {/* total likes */}
             <div className='flex flex-row items-center justify-between px-2 mt-3'>
                 <div>
@@ -201,6 +202,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                 </>
             }
         </div>
+        </Slide>
     )
 }
 

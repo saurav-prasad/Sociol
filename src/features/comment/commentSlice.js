@@ -11,7 +11,7 @@ export const commentSlice = createSlice({
 
             let comments = action.payload.comments;
             comments = comments.map(data => ({ ...data, key: nanoid() }));
-        
+
             state[postId] = comments;
         },
         deleteComment: (state, action) => {
@@ -20,9 +20,9 @@ export const commentSlice = createSlice({
             state[postId] = newState
         },
         addComment: (state, action) => {
-            const postId = action.payload.postId
+            const postId = action.payload[0]
             const comment = {
-                ...action.payload,
+                ...action.payload[1].comment,
                 key: nanoid()
             }
             const existingComments = [...state[postId] || []];
