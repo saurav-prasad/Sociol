@@ -20,8 +20,6 @@ function CommentBox({ profilePhoto, profileId, username, postId, }) {
         })
     }
 
-
-
     const onSubmit = async (e) => {
         e.preventDefault()
         setCommentStatus(true)
@@ -57,13 +55,13 @@ function CommentBox({ profilePhoto, profileId, username, postId, }) {
             <div className='mr-2 flex-shrink-0'>
                 <img
                     className='rounded-full w-8 h-8 object-cover'
-                    src={user.profilePhoto} alt={user.username} />
+                    src={user?.profilePhoto} alt={user?.username} />
             </div>
             <div className='w-full flex flex-row items-end border-b'>
                 <textarea
                     ref={textareaRef}
                     name='comment'
-                    value={data.comment}
+                    value={data?.comment}
                     onChange={onChange}
                     className='w-full outline-0 text-lg overflow-hidden resize-none	'
                     placeholder='Add a comment' id="" cols="" rows="1" />

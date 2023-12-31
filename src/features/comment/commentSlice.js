@@ -16,7 +16,7 @@ export const commentSlice = createSlice({
         },
         deleteComment: (state, action) => {
             const postId = action.payload.postId
-            const newState = state[action.payload.postId].filter((data) => data.key !== action.payload.key);
+            const newState = state[action.payload.postId].filter((data) => data.id !== action.payload.id);
             state[postId] = newState
         },
         addComment: (state, action) => {
@@ -31,7 +31,7 @@ export const commentSlice = createSlice({
         },
         updateComment: (state, action) => {
             const postId = action.payload.postId
-            const newState = state[action.payload.postId].map((data) => (data.key === action.payload.key ?
+            const newState = state[action.payload.postId].map((data) => (data.id === action.payload.id ?
                 {
                     ...data,
                     ...action.payload

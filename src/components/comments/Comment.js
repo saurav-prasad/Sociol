@@ -20,7 +20,7 @@ function Comment({ postId }) {
                 if (comments[postId]) {
                     const sortedArray = sortArray(comments[postId])
                     setAllComments(sortedArray)
-                    console.log(comments[postId]);
+                    console.log(sortedArray);
                 }
                 else if (!comments[postId]) {
                     const commentsData = await comment.get(`/getcomment/${postId}`, {
@@ -46,7 +46,7 @@ function Comment({ postId }) {
                     allComments ?
                         allComments.map(data =>
                             <Slide key={data.id} direction='up' duration={230} triggerOnce cascade damping={0.1}>
-                                <Comments profilePhoto={data.profilePhoto} username={data.username}
+                                <Comments postId={data.postId} profileId={data.profileId} profilePhoto={data.profilePhoto} username={data.username}
                                     commentText={data.comment} commentId={data.id} timestamp={data.timestamp} />
                             </Slide>
                         ) :

@@ -11,6 +11,7 @@ import { useNavigate } from 'react-router-dom';
 import CommentBox from '../commentBox/CommentBox';
 import Comment from '../comments/Comment';
 import timePassed from '../../functions/timePassed';
+import throttle from '../../functions/throttle';
 
 function PostCard({ profilePhoto, username, about, profileId, postKey, id, image, text, like, comment, timestamp }) {
     const [more, setMore] = useState(false)
@@ -39,7 +40,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
         }
     }
 
-    const onLikeClick = async () => {
+    const onLikeClick = throttle(async () => {
         try {
             if (ifLiked) {
                 setIfLiked(false)
@@ -63,7 +64,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
         } catch (error) {
             console.log(error);
         }
-    }
+    }, 1000)
 
     useEffect(() => {
         async function fetchData() {
