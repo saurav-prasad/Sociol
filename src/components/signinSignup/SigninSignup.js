@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import "./signinSignup.css"
-import { Link, useLocation, useNavigate } from 'react-router-dom'
-import { auth } from '../../axios'
+import {  useLocation, useNavigate } from 'react-router-dom'
+import { auth } from '../../axios/axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { signIn } from '../../features/auth/authSlice'
 

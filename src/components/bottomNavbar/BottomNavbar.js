@@ -14,6 +14,7 @@ function BottomNavbar({ navbarList }) {
         dispatch(signOut())
         localStorage.removeItem('auth-token')
     }
+    
     return (
         <aside className="z-10 xl:hidden fixed bottom-0 w-screen border-t bg-white ">
             <div className="space-x-4 flex justify-around items-center max-w-lg mx-auto">
@@ -21,7 +22,7 @@ function BottomNavbar({ navbarList }) {
                     navbarList.map((data) =>
                         <span
                             onClick={() => { navigate(data.href); window.scrollTo(0, 0); }}
-                            className="cursor-pointer flex flex-col transform items-center rounded-lg px-3 py-1 text-gray-600 transition-colors duration-300 select-none hover:bg-gray-100 hover:text-gray-700"
+                            className={`cursor-pointer flex flex-col transform items-center rounded-lg px-3 py-1 text-gray-600 transition-colors duration-300 select-none hover:bg-gray-100 hover:text-gray-700`}
                         >
                             {data.icon}
                             <span className=" text-xs font-normal">{data.name}</span>

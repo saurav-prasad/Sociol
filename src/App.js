@@ -1,7 +1,6 @@
-import { Navigate, Route, Router, RouterProvider, Routes, createBrowserRouter, createRoutesFromElements, useNavigate } from 'react-router-dom';
+import { Navigate, RouterProvider, createBrowserRouter } from 'react-router-dom';
 import './App.css';
 import SideNavbar from './components/sideNavbar/SideNavbar';
-import Test from './components/Test';
 import BottomNavbar from './components/bottomNavbar/BottomNavbar';
 import CreatePost from './components/createPost.js/CreatePost';
 import Home from './components/home/Home';
@@ -14,9 +13,8 @@ import Auth from './components/signinSignup/Auth';
 import SigninSignup from './components/signinSignup/SigninSignup';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { auth, post } from './axios';
+import { auth, post } from './axios/axios';
 import { signIn } from './features/auth/authSlice';
-import sortArray from './sortArray';
 import { createPost } from './features/post/postSlice';
 import UpdatePost from './components/updatePost/UpdatePost';
 

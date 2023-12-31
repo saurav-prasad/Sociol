@@ -4,7 +4,7 @@ import { Power } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { signOut } from '../../features/auth/authSlice'
-import sortArray from '../../sortArray'
+import sortArray from '../../functions/sortArray'
 
 function Profile() {
     const navigate = useNavigate()
@@ -59,7 +59,7 @@ function Profile() {
                 <div className=' flex flex-row justify-start'>
                     {/* profile info */}
                     <div className='flex shrink-0 justify-center items-center mr-3 md:mr-12'>
-                        <img className="select-none md:h-40 md:w-40 h-28 p-1 w-28 rounded-full border border-y-purple-600 border-x-violet-500 object-cover"
+                        <img className="select-none md:h-40 md:w-40 h-28 p-1 w-28 rounded-full border border-y-purple-600 border-x-violet-500 object-cover "
                             src={user?.profilePhoto}
                             alt='profile' />
                     </div>

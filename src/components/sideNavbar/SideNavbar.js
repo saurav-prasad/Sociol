@@ -25,7 +25,7 @@ function Navbar({ navbarList }) {
                                     onClick={() => {
                                         navigate(data.href); window.scrollTo(0, 0);
                                     }}
-                                    className="select-none cursor-pointer flex transform items-center rounded-lg px-3 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700"
+                                    className={`select-none cursor-pointer flex transform items-center rounded-lg px-3 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700`}
                                 >
                                     {data.icon}
                                     <span className="mx-5 text-md font-medium">{data.name}</span>

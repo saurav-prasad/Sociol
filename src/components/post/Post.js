@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PostCard from '../postCard/PostCard'
 import {  useSelector } from 'react-redux'
-import sortArray from '../../sortArray'
+import sortArray from '../../functions/sortArray'
 
 function Post() {
 
@@ -11,17 +11,6 @@ function Post() {
         const a = sortArray(posts)
         setPostsData(a)
     }, [posts])
-
-    // useEffect(() => {
-    //     async function fetchUser() {
-    //         console.log("object",posts);
-    //         let fetchPosts = await post.get('/getallpost')
-    //         fetchPosts = sortArray(fetchPosts.data.data)
-    //         setPostsData(fetchPosts)
-    //         dispatch(createPost(fetchPosts))
-    //     }
-    //     fetchUser()
-    // }, [])
 
     return (
         <div className='max-w-lg mx-auto'>

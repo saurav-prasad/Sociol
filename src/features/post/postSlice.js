@@ -31,12 +31,20 @@ export const postSlice = createSlice({
                     ...action.payload
                 } : data));
             return newState;
+        },
+        updatePostByProfileId: (state, action) => {
+            const newState = state.map((data) => (data.profileId === action.payload.profileId ?
+                {
+                    ...data,
+                    ...action.payload
+                } : data));
+            return newState;
         }
     }
 })
 
 
 
-export const { createPost, deletePost, addPost, updatePost } = postSlice.actions
+export const { createPost, deletePost, addPost, updatePost,updatePostByProfileId } = postSlice.actions
 
 export default postSlice.reducer

@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { profile } from '../../axios'
+import { profile } from '../../axios/axios'
 import uploadImage from '../../firestoreQuery/uploadImage'
 import { updateUser } from '../../features/auth/authSlice'
+import { updatePostByProfileId } from '../../features/post/postSlice'
 import deleteImage from '../../firestoreQuery/deleteImage'
 
 function UpdateProfile() {
@@ -17,6 +18,7 @@ function UpdateProfile() {
   const testImageRef = useRef(null);
   const navigate = useNavigate()
   const [updateStatus, setUpdateStatus] = useState(false)
+  const [preImage, setPreImage] = useState()
 
   const onChange = (e) => {
     setData({
@@ -32,11 +34,11 @@ function UpdateProfile() {
     try {
       let image;
       if (profilePhoto) {
-        await deleteImage(user.profilePhoto, 'profilePhoto')
+        if (preImage.startsWith('https://firebasestorage.googleapis.com')) await deleteImage(preImage, 'profilePhoto')
         image = await uploadImage(profilePhoto, 'profilePhoto')
       }
 
-      const updateprofile = await profile.post('/updateprofile',
+      const updateprofileData = await profile.post('/updateprofile',
         profilePhoto ?
           { ...data, profilePhoto: image } :
           {
@@ -52,7 +54,15 @@ function UpdateProfile() {
             'auth-token': user.token
           }
         })
-      dispatch(updateUser(updateprofile.data.data))
+
+      dispatch(updateUser(updateprofileData.data.data))
+      dispatch(updatePostByProfileId({
+        username: updateprofileData.data.data.username,
+        about: updateprofileData.data.data?.about,
+        profilePhoto: updateprofileData.data.data.profilePhoto,
+        profileId: updateprofileData.data.data._id,
+      }))
+
       navigate('/profile')
       setUpdateStatus(false)
     } catch (error) {
@@ -73,7 +83,7 @@ function UpdateProfile() {
       bio: user?.bio,
       profilePhoto: user?.profilePhoto
     })
-
+    setPreImage(user?.profilePhoto)
   }, [user])
 
   const onImageUpload = (e) => {
@@ -269,6 +279,7 @@ function UpdateProfile() {
         <button disabled={updateStatus} onClick={onCancel} type="button" className="text-sm font-semibold leading-6 text-gray-900">
           Cancel
         </button>
+
         <button
           type="submit"
           disabled={updateStatus}

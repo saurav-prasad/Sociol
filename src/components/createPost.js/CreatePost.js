@@ -2,7 +2,7 @@ import { Image } from 'lucide-react'
 import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
-import { post } from '../../axios'
+import { post } from '../../axios/axios'
 import uploadImage from '../../firestoreQuery/uploadImage'
 import { addPost, } from '../../features/post/postSlice'
 
