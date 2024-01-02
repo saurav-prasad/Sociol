@@ -17,10 +17,11 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
     const dispatch = useDispatch()
     const [data, setData] = useState(commentText)
     const textareaRef = useRef(null)
+    const [deleteStatus, setDeleteStatus] = useState(false)
 
     const onDelete = async () => {
+        setDeleteStatus(true)
         try {
-            setToggleOpen(!toggleOpen)
             const deletedComment = await comment.delete(`/deletecomment/${commentId}`, {
                 headers: {
                     'auth-token': user.token
@@ -36,8 +37,12 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
                 });
                 dispatch(updatePost({ _id: postId, comment: commentCount - 1 }))
                 dispatch(deleteComment({ id: commentId, postId: postId }))
+                setDeleteStatus(false)
+                setToggleOpen(!toggleOpen)
+
             }
         } catch (error) {
+            setDeleteStatus(false)
             console.log(error);
         }
     }
@@ -56,7 +61,6 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
                     'auth-token': user.token
                 }
             })
-            console.log(updateCmnt);
             setCommentUpdateStatus(false)
             setUpdateStatus(false)
             updateCmnt.data.success && dispatch(updateComment({ id: commentId, postId, comment: data }))
@@ -96,9 +100,18 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
                                                     <X onClick={() => setToggleOpen(!toggleOpen)} size={28} className='z-10 right-0 top-0 cursor-pointer' />
                                                 </div>
                                             </div>
-                                            <div className='w-full text-left px-2 py-1 '>
-                                                <span onClick={onDelete} className='w-full select-none font-medium text-gray-700'>Delete</span>
-                                            </div>
+                                            <div className='w-full text-left '>
+                                                <button
+                                                    type="submit"
+                                                    onClick={onDelete}
+                                                    className="cursor-pointer flex w-full justify-center items-center h-10 rounded-b bg-slate-400 px-2 py-1.5 leading-6 text-gray-900 shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
+                                                >
+                                                    {
+                                                        deleteStatus ?
+                                                            <span className="loader text-[3px] h-[5px] w-[5px]" /> :
+                                                            <span className='w-full text-left font-medium text-base'>Delete</span>
+                                                    }
+                                                </button>                                            </div>
                                         </div>
                                     </div>
                                 }

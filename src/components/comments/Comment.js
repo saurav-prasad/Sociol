@@ -50,24 +50,7 @@ function Comment({ postId }) {
                                     commentText={data.comment} commentId={data.id} timestamp={data.timestamp} />
                             </Slide>
                         ) :
-                        <SkeletonTheme baseColor="#d4d4d4" highlightColor="#858383">
-                            {Array.from({ length: 1 }).map(_ =>
-                                <div className='flex flex-row items-start px-2'>
-                                    <div className='mr-2 flex-shrink-0'>
-                                        <Skeleton width={40} height={40} circle borderRadius={50} />
-                                    </div>
-                                    <div className='w-full bg-[#fbfaf8] rounded px-3 py-2'>
-                                        <div className='w-full flex flex-row items-center justify-between'>
-                                            <Skeleton width={100} height={10} />
-                                        </div>
-                                        <p className='w-4/5 text-left text-slate-800'>
-                                            <Skeleton className='w-full' height={10} />
-                                        </p>
-                                    </div>
-                                </div>
-                            )
-                            }
-                        </SkeletonTheme>
+                    <CommentSkeleton/>
                 }
             </div>
         </>
@@ -75,3 +58,26 @@ function Comment({ postId }) {
 }
 
 export default Comment
+
+export const CommentSkeleton = () => {
+    return <>
+        <SkeletonTheme baseColor="#d4d4d4" highlightColor="#858383">
+            {Array.from({ length: 1 }).map(_ =>
+                <div className='flex flex-row items-start px-2'>
+                    <div className='mr-2 flex-shrink-0'>
+                        <Skeleton width={40} height={40} circle borderRadius={50} />
+                    </div>
+                    <div className='w-full bg-[#fbfaf8] rounded px-3 py-2'>
+                        <div className='w-full flex flex-row items-center justify-between'>
+                            <Skeleton width={100} height={10} />
+                        </div>
+                        <p className='w-4/5 text-left text-slate-800'>
+                            <Skeleton className='w-full' height={10} />
+                        </p>
+                    </div>
+                </div>
+            )
+            }
+        </SkeletonTheme>
+    </>
+}

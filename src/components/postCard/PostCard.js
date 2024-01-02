@@ -12,6 +12,7 @@ import CommentBox from '../commentBox/CommentBox';
 import Comment from '../comments/Comment';
 import timePassed from '../../functions/timePassed';
 import throttle from '../../functions/throttle';
+import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 
 function PostCard({ profilePhoto, username, about, profileId, postKey, id, image, text, like, comment, timestamp }) {
     const [more, setMore] = useState(false)
@@ -22,12 +23,14 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
     const [postImage, setPostImage] = useState()
     const [ifLiked, setIfLiked] = useState(false)
     const [toggleComment, setToggleComment] = useState(false)
+    const [deleteStatus, setDeleteStatus] = useState(false)
 
     const onUpdate = () => {
         navigate(`/updatepost/${id}`)
     }
 
     const onDelete = async () => {
+        setDeleteStatus(true)
         try {
             await post.delete(`/deletepost/${id}`, {
                 headers: {
@@ -35,7 +38,9 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                 }
             })
             dispatch(deletePost({ key: postKey }))
+            setDeleteStatus(false)
         } catch (error) {
+            setDeleteStatus(false)
             console.log(error);
         }
     }
@@ -43,13 +48,15 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
     const onLikeClick = throttle(async () => {
         try {
             if (ifLiked) {
-                setIfLiked(false)
-                const unlike = await liked.get(`/unlike/${id}`, {
-                    headers: {
-                        "auth-token": user.token
-                    }
-                })
-                unlike.data.data.unLiked && dispatch(updatePost({ _id: id, like: like - 1 }))
+                if (like >= 1) {
+                    setIfLiked(false)
+                    const unlike = await liked.get(`/unlike/${id}`, {
+                        headers: {
+                            "auth-token": user.token
+                        }
+                    })
+                    unlike.data.data.unLiked && dispatch(updatePost({ _id: id, like: like - 1 }))
+                }
             }
             else if (!ifLiked) {
                 setIfLiked(true)
@@ -87,12 +94,11 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
 
     return (
         <Slide direction='up' duration={250} triggerOnce cascade damping={1}>
-
             <div className="flex flex-col rounded-lg py-2 border bg-white mb-10 ">
                 {/* user details */}
                 <div className='flex items-center justify-between px-3 mb-3'>
                     <div className='flex items-center justify-start'>
-                        <img class="inline-block h-10 w-10 object-cover rounded-full border bg-gradient-to-r from-purple-500/90 to-pink-500/90"
+                        <img className="inline-block h-10 w-10 object-cover rounded-full border bg-gradient-to-r from-purple-500/90 to-pink-500/90"
                             src={profilePhoto} alt="" />
                         <div className='flex ml-2 flex-col justify-center items-sart'>
                             <p className=' text-left text-md font-semibold'>{username}</p>
@@ -105,15 +111,26 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                             <MoreHorizontal onClick={() => settoggleOpen(!toggleOpen)} className='cursor-pointer' />
                             {toggleOpen &&
                                 <div className={`absolute right-0 top-0 transition ease-in-out z-10 `}>
-                                    <div className='relative w-32 flex flex-col justify-start items-center divide-y divide-gray-300 bg-slate-100 rounded'>
+                                    <div className='relative w-32 flex flex-col justify-start items-center divide-y divide-gray-300 bg-slate-300 rounded'>
                                         <div className='w-full text-left px-2 py-2  '>
                                             <div className='flex flex-row items-center'>
-                                                <span onClick={onUpdate} className='w-full select-none font-medium text-gray-700'>Update</span>
+                                                <span onClick={onUpdate} className='w-full select-none font-medium text-gray-800'>Update</span>
                                                 <X onClick={() => settoggleOpen(!toggleOpen)} size={28} className='z-10 right-0 top-0 cursor-pointer' />
                                             </div>
                                         </div>
-                                        <div className='w-full text-left px-2 py-2 '>
-                                            <span onClick={onDelete} className='w-full select-none font-medium text-gray-700'>Delete</span>
+                                        <div className='w-full text-left '>
+                                            {/* <span onClick={onDelete} className='w-full select-none font-medium text-gray-700'>Delete</span> */}
+                                            <button
+                                                type="submit"
+                                                onClick={onDelete}
+                                                className="cursor-pointer flex w-full justify-center items-center h-10 rounded-b bg-slate-400 px-2 py-1.5 leading-6 text-gray-900 shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
+                                            >
+                                                {
+                                                    deleteStatus ?
+                                                        <span className="loader text-[3px] h-[5px] w-[5px]" /> :
+                                                        <span className='w-full text-left font-medium text-base'>Delete</span>
+                                                }
+                                            </button>
                                         </div>
                                     </div>
                                 </div>
@@ -151,12 +168,12 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                 </div>
                 {/* Like and comment */}
                 <div className='flex justify-around pt-1 border-t'>
-                    <div onClick={onLikeClick} className={`select-none p-2 flex items-center cursor-pointer  ${ifLiked ? 'text-blue-600' : 'text-zinc-500'}`}>
-                        <ThumbUpRoundedIcon fontSize='medium' className='scale-x-[-1]' />
+                    <div onClick={onLikeClick} className={`${ifLiked ? 'active:scale-90' : 'active:scale-110'} active:transition-all duration-200  ease-in-out select-none p-2 flex items-center cursor-pointer  ${ifLiked ? 'text-blue-600' : 'text-zinc-500'}`}>
+                        <ThumbUpRoundedIcon fontSize='medium' className='scale-x-[-1] ' />
                         <span className='font-medium ml-1 text-sm'>Like</span>
                     </div>
 
-                    <div onClick={() => setToggleComment(!toggleComment)} className='select-none p-2 flex items-center cursor-pointer  text-zinc-500'>
+                    <div onClick={() => setToggleComment(!toggleComment)} className={`${toggleComment ? 'active:scale-90' : 'active:scale-110'}  select-none duration-200 p-2 flex items-center cursor-pointer ease-in-out ${toggleComment ? 'text-blue-600' : 'text-zinc-500'} active:transition-all`}>
                         <CommentRoundedIcon fontSize='medium' className='' />
                         <span className='font-medium text-sm ml-1'>Comment</span>
                     </div>
@@ -171,9 +188,70 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                     </>
                 }
             </div>
-        </Slide>
+        </Slide >
     )
 }
 
-
 export default PostCard
+
+
+export const PostCardSkeleton = () => {
+    return <>
+        <SkeletonTheme baseColor="#d4d4d4" highlightColor="#858383">
+
+            < div className="flex flex-col rounded-lg py-2 border bg-white mb-10 " >
+                {/* user details */}
+                < div className='flex items-center justify-between px-3 mb-3' >
+                    <div className='flex items-center justify-start'>
+                        <Skeleton width={50} height={50} circle borderRadius={50} />
+                        <div className='flex ml-2 flex-col justify-center items-sart'>
+                            <p className=' text-left text-md font-semibold'>
+                                <Skeleton width={100} height={10} />
+                            </p>
+                            <span className='text-left text-xs text-zinc-600'>
+                                <Skeleton width={100} height={10} />
+                            </span>
+                        </div>
+                    </div>
+                </div >
+                {/* Post text */}
+                < div className='text-left w-2/4 mb-1 px-3 transition-all text-md antialiased leading-[1.59rem] ' >
+                    <Skeleton className='' height={15} />
+                </div >
+                <div className='text-left mb-3 w-3/4 px-3 transition-all text-md antialiased leading-[1.59rem] '>
+                    <Skeleton className='' height={15} />
+                </div>
+                {/* Post image */}
+                <div className='h-60'>
+                    <Skeleton className='w-full h-full' />
+                </div>
+                {/* total likes */}
+                <div className='flex flex-row items-center justify-start px-2 mt-3'>
+                    <span className='w-10 mr-2 text-left text-base font-semibold text-slate-700'>
+                        <span className='text-xs font-medium ml-1 text-slate-500'>
+                            <Skeleton className='w-full' height={10} />
+                        </span>
+                    </span>
+                    <span className='w-10 mr-2 text-left text-base font-semibold text-slate-700'>
+                        <span className='text-xs font-medium ml-1 text-slate-500'>
+                            <Skeleton className='w-full' height={10} />
+                        </span>
+                    </span>
+                </div>
+                {/* Like and comment */}
+                <div className='flex justify-around pt-1 border-t'>
+                    <span className='w-16 mr-2 text-left text-base font-semibold text-slate-700'>
+                        <span className='text-xs font-medium ml-1 text-slate-500'>
+                            <Skeleton borderRadius={15} className='w-full' height={25} />
+                        </span>
+                    </span>
+                    <span className='w-16 mr-2 text-left text-base font-semibold text-slate-700'>
+                        <span className='text-xs font-medium ml-1 text-slate-500'>
+                            <Skeleton borderRadius={15} className='w-full' height={25} />
+                        </span>
+                    </span>
+                </div>
+            </div >
+        </SkeletonTheme>
+    </>
+}
