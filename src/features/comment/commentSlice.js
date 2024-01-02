@@ -1,6 +1,6 @@
 import { createSlice, nanoid } from "@reduxjs/toolkit"
 
-let initialState = []
+let initialState = {}
 
 export const commentSlice = createSlice({
     name: 'comment',
@@ -11,18 +11,17 @@ export const commentSlice = createSlice({
 
             let comments = action.payload.comments;
             comments = comments.map(data => ({ ...data, key: nanoid() }));
-
-            state[postId] = comments;
+            state[postId] = comments
         },
         deleteComment: (state, action) => {
-            const postId = action.payload.postId
-            const newState = state[action.payload.postId].filter((data) => data.id !== action.payload.id);
-            state[postId] = newState
+            const postId = action.payload.postId;
+            const newState = state[postId].filter((data) => data.id !== action.payload.id);
+            state[postId] = newState;
         },
         addComment: (state, action) => {
-            const postId = action.payload[0]
+            const postId = action.payload.postId
             const comment = {
-                ...action.payload[1].comment,
+                ...action.payload.comment,
                 key: nanoid()
             }
             const existingComments = [...state[postId] || []];
@@ -30,13 +29,15 @@ export const commentSlice = createSlice({
             state[postId] = existingComments
         },
         updateComment: (state, action) => {
-            const newState = state.map((data) => (data.id === action.payload.id ?
+            const postId = action.payload.postId
+
+            const newState = state[postId].map((data) => (data.id === action.payload.id ?
                 {
                     ...data,
                     ...action.payload
                 } : data));
 
-            return newState
+            state[postId] = newState
         }
     }
 })

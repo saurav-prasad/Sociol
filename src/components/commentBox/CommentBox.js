@@ -29,9 +29,8 @@ function CommentBox({ profilePhoto, profileId, username, postId, }) {
                 const commentData = await comment.post(`/createcomment/${postId}`, {
                     comment: data.comment
                 }, { headers: { 'auth-token': user.token } })
-                console.log(commentData);
-                dispatch(addComment([postId, { comment: commentData.data.data }]))
 
+                dispatch(addComment({ postId, comment: commentData.data.data }))
                 // updating comment count
                 let commentCount = 0
                 posts.forEach(element => {
@@ -39,6 +38,7 @@ function CommentBox({ profilePhoto, profileId, username, postId, }) {
                         commentCount = element.comment
                     }
                 });
+
                 dispatch(updatePost({ _id: postId, comment: commentCount + 1 }))
 
                 setData({ comment: '' })
@@ -68,7 +68,7 @@ function CommentBox({ profilePhoto, profileId, username, postId, }) {
                 <button
                     type="button"
                     onClick={onSubmit}
-                    // className="cursor-pointer h-8 ml-1 rounded-md bg-sky-500 px-2 py-1 text-xs md:text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900"
+                    disabled={data.comment.length <= 0}
                     className="cursor-pointer flex mt-5 w-28 h-8 justify-center items-center rounded-md bg-blue-600 py-1 px-2 text-sm font-medium leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                 >
                     {commentStatus ? <span className="loader text-[3px] h-[5px] w-[5px]" /> :

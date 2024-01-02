@@ -48,7 +48,6 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
         setData(e.target.value)
     }
     const onUpdate = async (e) => {
-        console.log("object");
         e.preventDefault()
         setCommentUpdateStatus(true)
         try {
@@ -60,8 +59,7 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
             console.log(updateCmnt);
             setCommentUpdateStatus(false)
             setUpdateStatus(false)
-            //  TODO working here
-            dispatch(updateComment({ id: commentId, comment: data }))
+            updateCmnt.data.success && dispatch(updateComment({ id: commentId, postId, comment: data }))
         } catch (error) {
             console.log(error);
             setCommentUpdateStatus(false)
@@ -129,6 +127,7 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
                                         Cancel
                                     </button>
                                     <button
+                                        disabled={data.length <= 0}
                                         type="button"
                                         onClick={onUpdate}
                                         className="cursor-pointer flex mt-3 w-16 h-7 justify-center items-center rounded-md bg-blue-600 py-1 px-3 text-sm font-medium leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"

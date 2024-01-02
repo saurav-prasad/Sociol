@@ -14,13 +14,13 @@ function Comment({ postId }) {
     const comments = useSelector(state => state.commentReducer)
     const [allComments, setAllComments] = useState()
     const effe = comments[postId]
+
     useEffect(() => {
         async function fetchData() {
             try {
                 if (comments[postId]) {
                     const sortedArray = sortArray(comments[postId])
                     setAllComments(sortedArray)
-                    console.log(sortedArray);
                 }
                 else if (!comments[postId]) {
                     const commentsData = await comment.get(`/getcomment/${postId}`, {
