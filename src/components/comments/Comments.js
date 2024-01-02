@@ -3,7 +3,7 @@ import React, { useRef, useState } from 'react'
 import timePassed from '../../functions/timePassed';
 import { useDispatch, useSelector } from 'react-redux';
 import { comment } from '../../axios/axios';
-import { deleteComment } from '../../features/comment/commentSlice';
+import { deleteComment, updateComment } from '../../features/comment/commentSlice';
 import { updatePost } from '../../features/post/postSlice';
 
 
@@ -61,7 +61,7 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
             setCommentUpdateStatus(false)
             setUpdateStatus(false)
             //  TODO working here
-            dispatch(deleteComment({ id: commentId, comment: data }))
+            dispatch(updateComment({ id: commentId, comment: data }))
         } catch (error) {
             console.log(error);
             setCommentUpdateStatus(false)
