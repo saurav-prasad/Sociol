@@ -17,3 +17,6 @@ export const liked = axios.create({
 export const comment = axios.create({
     baseURL: `${URL}/comment`
 })
+export const follow = axios.create({
+    baseURL: `${URL}/follow`
+})

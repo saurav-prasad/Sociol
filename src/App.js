@@ -17,6 +17,7 @@ import { auth, post } from './axios/axios';
 import { signIn } from './features/auth/authSlice';
 import { createPost } from './features/post/postSlice';
 import UpdatePost from './components/updatePost/UpdatePost';
+import ProfileByUsername from './components/profileByUsername/ProfileByUsername';
 
 function App() {
   const dispatch = useDispatch()
@@ -93,7 +94,11 @@ function App() {
         },
         {
           path: "/profile",
-          element: <Profile />
+          element: <Profile />,
+        },
+        {
+          path: "/profile/:username",
+          element: <ProfileByUsername />
         },
         {
           path: "/profile/update",

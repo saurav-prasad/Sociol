@@ -98,11 +98,11 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                 {/* user details */}
                 <div className='flex items-center justify-between px-3 mb-3'>
                     <div className='flex items-center justify-start'>
-                        <img className="inline-block h-10 w-10 object-cover rounded-full border bg-gradient-to-r from-purple-500/90 to-pink-500/90"
-                            src={profilePhoto} alt="" />
-                        <div className='flex ml-2 flex-col justify-center items-sart'>
-                            <p className=' text-left text-md font-semibold'>{username}</p>
-                            {about && <span className='text-left text-xs text-zinc-600'>{sliceString(about, 35)}</span>}
+                        <img onClick={() => navigate(`/profile/${username}`)} className="cursor-pointer inline-block h-10 w-10 object-cover rounded-full border bg-gradient-to-r from-purple-500/90 to-pink-500/90"
+                            src={profilePhoto} alt={username} />
+                        <div className=' flex ml-2 flex-col justify-center items-sart'>
+                            <p onClick={() => navigate(`/profile/${username}`)} className='select-none cursor-pointer text-left text-md font-semibold'>{username}</p>
+                            {about && <span className='select-none text-left text-xs text-zinc-600'>{sliceString(about, 35)}</span>}
                         </div>
                     </div>
                     {/* menu */}
@@ -123,6 +123,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                                             <button
                                                 type="submit"
                                                 onClick={onDelete}
+                                                disabled={deleteStatus}
                                                 className="cursor-pointer flex w-full justify-center items-center h-10 rounded-b bg-slate-400 px-2 py-1.5 leading-6 text-gray-900 shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
                                             >
                                                 {

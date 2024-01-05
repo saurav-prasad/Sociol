@@ -104,6 +104,7 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
                                                 <button
                                                     type="submit"
                                                     onClick={onDelete}
+                                                    disabled={deleteStatus}
                                                     className="cursor-pointer flex w-full justify-center items-center h-10 rounded-b bg-slate-400 px-2 py-1.5 leading-6 text-gray-900 shadow-sm hover:bg-slate-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-slate-600"
                                                 >
                                                     {

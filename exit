@@ -1,0 +1,125 @@
+[33mcommit f3b306cb5251fa6c605f2d46fdab6f1108119096[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: saurav-prasad <sauravprasad2050@gmail.com>
+Date:   Tue Jan 2 21:07:13 2024 +0530
+
+    ui improved and comment functionality bugs fixed
+
+[33mcommit ca6c973f911e703024d7bfd59d25e49b1b957012[m
+Author: saurav-prasad <sauravprasad2050@gmail.com>
+Date:   Tue Jan 2 19:44:07 2024 +0530
+
+    improved comment functionality
+
+[33mcommit 6edeb0bea93ad79cb15a89126b5aeb293f4b8892[m
+Author: saurav-prasad <sauravprasad2050@gmail.com>
+Date:   Tue Jan 2 17:53:18 2024 +0530
+
+    comment functionality completed
+
+[33mcommit f13b7c97f0c8867f2142787e8e5710cb0e0f6777[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Sun Dec 31 21:50:15 2023 +0530
+
+    added throttling to like button and added delete and update comment functionality
+
+[33mcommit 252cdaf501a6b7047c15b7b9987cc4ee52992052[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Sun Dec 31 15:54:10 2023 +0530
+
+    added skeleton screen in comment page and some bugs fixed
+
+[33mcommit fae79e1dffe4eda67f5baa8522ff02b64a7e7a45[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Sat Dec 30 17:50:20 2023 +0530
+
+    working on comment functionality
+
+[33mcommit b8246ce72053f3b9f244a05ab70a673725378af4[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Fri Dec 29 23:21:22 2023 +0530
+
+    added like and working on comment functionality
+
+[33mcommit 14e9f95efeb0f283c2cc9d0ae880ae8b605b628d[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Fri Dec 29 15:01:16 2023 +0530
+
+    update post created
+
+[33mcommit 7ccf00cc77837783774186cc14c10410de6e9cec[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Thu Dec 28 16:39:23 2023 +0530
+
+    delete post functionality added
+
+[33mcommit 1fa435a0e03b495379f7a176f2c0b936940029a4[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Thu Dec 28 14:47:02 2023 +0530
+
+    created dynamic posts
+
+[33mcommit eb288a495d24cfe9860ccf7f224148a981d88530[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Wed Dec 27 21:48:32 2023 +0530
+
+    added api to  createPost page , feed, profile page
+
+[33mcommit b33431d6e3510c046b31daa5468fe166d30aed13[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Wed Dec 27 14:11:11 2023 +0530
+
+    improved uploadProfile
+
+[33mcommit 480098dae89e8693f057137103b5bd984faa7eba[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Tue Dec 26 20:32:29 2023 +0530
+
+    updateProfile page completed
+
+[33mcommit a45b9623498009d4f56417c8fc04b1bacfd13e76[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Mon Dec 25 23:47:33 2023 +0530
+
+    working on updateProfile
+
+[33mcommit fe20c8300b2d0bd1ea26056a1c66c7d67cf8b8b5[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Sat Dec 23 22:38:14 2023 +0530
+
+    working on redux
+
+[33mcommit 3e0a6133dfeb5d2d5eaf1277f3e5c5b978ec26ad[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Fri Dec 22 21:15:24 2023 +0530
+
+    commit
+
+[33mcommit c5bac655a92235bf35b6b54b0a3e88732903c6e0[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Thu Dec 21 20:14:20 2023 +0530
+
+    working on profile page
+
+[33mcommit fff056a636aa6e4f6d5fe2c4cab2bf1c14da32ac[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Wed Dec 20 22:54:13 2023 +0530
+
+    creatPost created and improved router code
+
+[33mcommit 56237a88adb263681f915ad54ed442f421ef22e1[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Tue Dec 19 22:54:39 2023 +0530
+
+    signinup post and navigationbar created
+
+[33mcommit 77067ef6021e79d8e849ae756f18561ffc81e82b[m
+Author: saurav-prasad <six6x9yt@gmail.com>
+Date:   Sat Dec 16 22:14:11 2023 +0530
+
+    initial commit
+
+[33mcommit c756ef3f7585231f49809bba8513f2dd3cdbdb93[m
+Author: Saurav <sauravprasad2050@gmail.com>
+Date:   Thu Oct 26 14:07:30 2023 +0530
+
+    Initialize project using Create React App

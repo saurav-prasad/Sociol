@@ -161,6 +161,7 @@ function CreatePost() {
                         <button
                             type="submit"
                             onClick={onSubmit}
+                            disabled={submitStatus}
                             className="cursor-pointer flex mt-5 w-28 justify-center items-center rounded-md h-9 bg-blue-600 px-3 py-1.5 text-sm font-medium leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
                             {submitStatus ? <span className="loader text-[3px] h-[5px] w-[5px]"></span> :
