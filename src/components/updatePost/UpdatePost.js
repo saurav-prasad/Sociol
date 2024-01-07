@@ -130,7 +130,7 @@ function UpdatePost() {
     }, [params])
 
     return (
-        <Zoom duration={200} triggerOnce>
+        <Zoom duration={150} triggerOnce>
             <div className='max-w-md mx-auto px-1  '>
                 <h1 className='text-3xl font-semibold pt-5 mb-10'>Update a post</h1>
                 <div className="col-span-full mb-7">

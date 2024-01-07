@@ -44,7 +44,6 @@ function SigninSignup() {
                 localStorage.setItem('auth-token', userData.token)
             }
             else if (pathname === '/auth/signup') {
-                console.log(data);
                 const signupRequest = await auth.post('/createuser', {
                     email: data.email,
                     password: data.password,
