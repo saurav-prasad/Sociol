@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { follow } from '../../axios/axios'
 
 function Profiles({ profilePhoto, about, username, profileId }) {
     const navigate = useNavigate()
     const [followStatus, setFollowStatus] = useState(false)
     const { user } = useSelector(state => state.authReducer)
-    const [ifFollow, setIfFollow] = useState(false)
+    const pathname = useLocation().pathname
+    const [ifFollow, setIfFollow] = useState(pathname.endsWith('/followings'))
 
     const handelFollow = async (e) => {
         e.preventDefault()
         setFollowStatus(true)
         try {
             if (ifFollow) {
-                await follow.get(`/unfollow/${user.profileId}`, {
+                await follow.get(`/unfollow/${profileId}`, {
                     headers: {
                         'auth-token': user?.token
                     }
@@ -23,7 +24,7 @@ function Profiles({ profilePhoto, about, username, profileId }) {
                 setFollowStatus(false)
             }
             else if (!ifFollow) {
-                await follow.get(`/createfollow/${user.profileId}`, {
+                await follow.get(`/createfollow/${profileId}`, {
                     headers: {
                         'auth-token': user?.token
                     }
@@ -42,7 +43,7 @@ function Profiles({ profilePhoto, about, username, profileId }) {
             try {
 
                 // check if follow
-                let checkFollow = await follow.get(`/iffollow/${user.profileId}`, {
+                let checkFollow = await follow.get(`/iffollow/${profileId}`, {
                     headers: {
                         'auth-token': user?.token
                     }

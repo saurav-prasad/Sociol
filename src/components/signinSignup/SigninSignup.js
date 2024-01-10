@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import "./signinSignup.css"
-import {  useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { auth } from '../../axios/axios'
 import { useDispatch, useSelector } from 'react-redux'
 import { signIn } from '../../features/auth/authSlice'
@@ -37,10 +37,8 @@ function SigninSignup() {
                 })
                 const userData = { ...signinRequest.data.data, token: signinRequest.data.token }
                 dispatch(signIn(userData))
-
-                setError(signinRequest.data?.message)
                 setSubmitStatus(false)
-                navigate('/profile')
+                signinRequest && navigate('/profile')
                 localStorage.setItem('auth-token', userData.token)
             }
             else if (pathname === '/auth/signup') {
@@ -50,12 +48,11 @@ function SigninSignup() {
                     username: data.username,
                     phone: data?.phone
                 })
-
+                console.log(signupRequest);
                 const userData = { ...signupRequest.data.data, token: signupRequest.data.token }
                 dispatch(signIn(userData))
-                setError(signupRequest.data?.message)
                 setSubmitStatus(false)
-                navigate('/profile')
+                signupRequest && navigate('/profile')
                 localStorage.setItem('auth-token', userData.token)
             }
         } catch (error) {

@@ -24,7 +24,8 @@ function Profile() {
         }
     })
     useEffect(() => {
-        const a = sortArray(posts)
+        let a = sortArray(posts)
+         a = a?.filter(data => data.profileId === user?.profileId)
         setPostsData(a)
     }, [posts])
 
@@ -90,7 +91,7 @@ function Profile() {
                                     <p className='select-none font-semibold text-base text-gray-800 flex'>
                                         <Slide triggerOnce direction='up' duration={150}>
                                             {
-                                                postsData.map(data => { return data?.profileId === user?.profileId }).length
+                                                postsData?.map(data => { return data.profileId === user.profileId }).length
                                             }
                                         </Slide>
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
@@ -138,7 +139,7 @@ function Profile() {
                             <p className='font-semibold select-none text-base text-gray-800 flex flex-col items-center justify-center'>
                                 <Slide triggerOnce direction='up' duration={150}>
                                     {
-                                        postsData?.map(data => { return data?.profileId === user?.profileId }).length
+                                        postsData?.map(data => { return data.profileId === user.profileId }).length
                                     }
                                 </Slide>
                                 <span className='text-sm font-normal text-zinc-800'>
