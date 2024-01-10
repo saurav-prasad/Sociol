@@ -69,7 +69,7 @@ function SigninSignup() {
     const testUserSignin = async () => {
         setTestSubmitStatus(true)
         try {
-            const signinRequest = await auth.post('/getuser', { email: 'test@sociol.com', password: 'test123' })
+            const signinRequest = await auth.post('/getuser', { email: 'test@test.com', password: 'test123' })
             const userData = { ...signinRequest.data.data, token: signinRequest.data.token }
             dispatch(signIn(userData))
 

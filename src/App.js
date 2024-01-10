@@ -13,11 +13,13 @@ import Auth from './components/signinSignup/Auth';
 import SigninSignup from './components/signinSignup/SigninSignup';
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { auth, post } from './axios/axios';
+import { auth, follow, post } from './axios/axios';
 import { signIn } from './features/auth/authSlice';
 import { createPost } from './features/post/postSlice';
 import UpdatePost from './components/updatePost/UpdatePost';
 import ProfileByUsername from './components/profileByUsername/ProfileByUsername';
+import Test from './components/Test';
+import Network from './components/network/Network';
 
 function App() {
   const dispatch = useDispatch()
@@ -26,12 +28,28 @@ function App() {
     async function fetchUser() {
       if (localStorage.getItem('auth-token')) {
         try {
-          const signinRequest = await auth.get('/fetchuser', {
+          let signinRequest = await auth.get('/fetchuser', {
             headers: {
               'auth-token': localStorage.getItem('auth-token')
             }
           })
-          const userData = { ...signinRequest.data.data, token: localStorage.getItem('auth-token') }
+
+          signinRequest = signinRequest.data.data
+
+          // get total followers
+          let followersData = await follow.get(`/gettotalfollowers/${signinRequest?.profileId}`)
+          followersData = followersData.data.data.totalFollowers
+
+          // get total followings
+          let followingData = await follow.get(`/gettotalfollowings/${signinRequest?.profileId}`)
+          followingData = followingData.data.data.totalFollowings
+
+          const userData = {
+            ...signinRequest,
+            token: localStorage.getItem('auth-token'),
+            followings: followingData,
+            followers: followersData
+          }
           dispatch(signIn(userData))
         } catch (error) {
           console.log(error);
@@ -101,6 +119,14 @@ function App() {
           element: <ProfileByUsername />
         },
         {
+          path: "/profile/:username/followers",
+          element: <Network />
+        },
+        {
+          path: "/profile/:username/followings",
+          element: <Network />
+        },
+        {
           path: "/profile/update",
           element: < UpdateProfile />
         }
@@ -129,8 +155,10 @@ function App() {
       element: <Error />
     }
   ])
+
   return (
     <div className="App relative min-h-screen bg-slate-50 text-gray-900">
+      {/* <Test/> */}
       <RouterProvider router={router} />
     </div>
   );

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import PostCard, { PostCardSkeleton } from '../postCard/PostCard'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-import { Zoom } from 'react-awesome-reveal'
+import { Slide, Zoom } from 'react-awesome-reveal'
 import { follow, post, profile } from '../../axios/axios'
 import ProfileHeader from '../profileHeader/ProfileHeader'
+import Skeleton from 'react-loading-skeleton'
 
 function ProfileByUsername() {
     const navigate = useNavigate()
@@ -48,11 +49,6 @@ function ProfileByUsername() {
         }
     }
 
-    useEffect(() => {
-        if (!user) {
-            navigate('/signin')
-        }
-    })
 
     useEffect(() => {
         async function fetchData() {
@@ -81,7 +77,7 @@ function ProfileByUsername() {
                     setFollowers(followersData)
 
                     // get total followings
-                    let followingData = await follow.get(`/gettotalfollowing/${profileData._id}`)
+                    let followingData = await follow.get(`/gettotalfollowings/${profileData._id}`)
                     followingData = followingData.data.data.totalFollowings
                     setFollowings(followingData)
 
@@ -107,9 +103,13 @@ function ProfileByUsername() {
                         <div className=' flex flex-row justify-start'>
                             {/* profile info */}
                             <div className='flex shrink-0 justify-center items-center mr-3 md:mr-12'>
-                                <img className="select-none md:h-40 md:w-40 h-28 p-1 w-28 rounded-full border border-y-purple-600 border-x-violet-500 object-cover "
-                                    src={data?.profilePhoto}
-                                    alt='profile' />
+                                {
+                                    data ?
+                                        <img className="select-none md:h-40 md:w-40 h-28 p-1 w-28 rounded-full border border-y-purple-600 border-x-violet-500 object-cover "
+                                            src={data?.profilePhoto}
+                                            alt='' /> :
+                                        <Skeleton width={100} height={100} circle borderRadius={50} />
+                                }
                             </div>
                             {/* Profile name and follow button */}
                             <div className='flex flex-col w-full space-y-3'>
@@ -133,20 +133,29 @@ function ProfileByUsername() {
                                 {/* follower following posts */}
                                 {/* Large screen */}
                                 <div className=' hidden md:flex flex-row justify-start space-x-11'>
-                                    <p className='select-none font-semibold text-base text-gray-800'>
-                                        {postsData?.length}
+                                    <p className='select-none font-semibold text-base text-gray-800 flex'>
+                                        {
+                                            postsData ? <Slide triggerOnce direction='down' duration={150}>{postsData.length}</Slide> :
+                                                <Skeleton baseColor="#d4d4d4" highlightColor="#858383" width={10} height={15} />
+                                        }
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                             Posts
                                         </span>
                                     </p>
-                                    <p className='select-none font-semibold text-base text-gray-800'>
-                                        {followers}
+                                    <p onClick={() => { followers > 0 && navigate(`/profile/${username}/followers`) }} className='cursor-pointer select-none font-semibold text-base text-gray-800 flex'>
+                                        {
+                                            followers?.toString() ? <Slide triggerOnce direction='down' duration={150}>{followers}</Slide> :
+                                                <Skeleton baseColor="#d4d4d4" highlightColor="#858383" width={10} height={15} />
+                                        }
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                             followers
                                         </span>
                                     </p>
-                                    <p className='select-none font-semibold text-base text-gray-800'>
-                                        {followings}
+                                    <p onClick={() => { followings > 0 && navigate(`/profile/${username}/followings`) }} className='cursor-pointer select-none font-semibold text-base text-gray-800 flex'>
+                                        {
+                                            followings?.toString() ? <Slide triggerOnce direction='down' duration={150}>{followings}</Slide> :
+                                                <Skeleton baseColor="#d4d4d4" highlightColor="#858383" width={10} height={15} />
+                                        }
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                             following
                                         </span>
@@ -171,29 +180,38 @@ function ProfileByUsername() {
                         </div>
                         {/* Mobile screen */}
                         <div className='md:hidden flex flex-row justify-around py-2 mt-6 space-x-11 border-t border-b'>
-                            <p className='font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
-                                {postsData?.length}
+                            <p className='font-semibold select-none text-base text-gray-800 flex flex-col items-center justify-center'>
+                                {
+                                    postsData ? <Slide triggerOnce direction='up' duration={150}>{postsData.length}</Slide> :
+                                        <Skeleton baseColor="#d4d4d4" highlightColor="#858383" width={10} height={15} />
+                                }
                                 <span className='text-sm font-normal text-zinc-800'>
                                     Posts
                                 </span>
                             </p>
-                            <p className='font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
-                                {followers}
+                            <p onClick={() => { followers > 0 && navigate(`/profile/${username}/followers`) }} className='cursor-pointer select-none font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
+                                {
+                                    followers?.toString() ? <Slide triggerOnce direction='up' duration={150}>{followers}</Slide> :
+                                        <Skeleton baseColor="#d4d4d4" highlightColor="#858383" width={10} height={15} />
+                                }
                                 <span className='text-sm ml-2 font-normal text-zinc-800'>
                                     followers
                                 </span>
                             </p>
-                            <p className='font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
-                                {followings}
+                            <p onClick={() => { followings > 0 && navigate(`/profile/${username}/followings`) }} className='cursor-pointer select-none font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
+                                {
+                                    followings?.toString() ? <Slide triggerOnce direction='up' duration={150}>{followings}</Slide> :
+                                        <Skeleton baseColor="#d4d4d4" highlightColor="#858383" width={10} height={15} />
+                                }
                                 <span className='text-sm ml-2 font-normal text-zinc-800'>
                                     following
                                 </span>
                             </p>
                         </div>
                     </div>
-                </Zoom>
+                </Zoom >
                 {/* Profile posts */}
-                <div className='flex flex-col mt-7 px-2 sm:px-6'>
+                < div className='flex flex-col mt-7 px-2 sm:px-6' >
                     {
                         postsData ?
                             postsData.map(data => {
@@ -212,10 +230,10 @@ function ProfileByUsername() {
                                     comment={data.comment}
                                 />
                             }) :
-                            <PostCardSkeleton />
+                            < PostCardSkeleton />
                     }
-                </div>
-            </div>
+                </ div>
+            </div >
         </>
     )
 }

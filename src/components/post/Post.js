@@ -3,6 +3,7 @@ import PostCard, { PostCardSkeleton } from '../postCard/PostCard'
 import { useSelector } from 'react-redux'
 import sortArray from '../../functions/sortArray'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import { Link } from 'react-router-dom'
 
 function Post() {
 
@@ -16,7 +17,6 @@ function Post() {
     return (
         <>
             <div className='max-w-lg mx-auto'>
-
                 {
                     postsData ?
                         postsData.map(data =>

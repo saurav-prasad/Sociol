@@ -103,7 +103,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                 {/* user details */}
                 <div className='flex items-center justify-between px-3 mb-3'>
                     <div className='flex items-center justify-start'>
-                        <img onClick={() => navigate(`/profile/${username}`)} className="cursor-pointer inline-block h-10 w-10 object-cover rounded-full border bg-gradient-to-r from-purple-500/90 to-pink-500/90"
+                        <img onClick={() => navigate(`/profile/${username}`)} className="cursor-pointer inline-block h-10 w-10 object-cover rounded-full border"
                             src={profilePhoto} alt={username} />
                         <div className=' flex ml-2 flex-col justify-center items-sart'>
                             <p onClick={() => navigate(`/profile/${username}`)} className='select-none cursor-pointer text-left text-md font-semibold'>{username}</p>

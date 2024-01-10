@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react'
 import PostCard, { PostCardSkeleton } from '../postCard/PostCard'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import sortArray from '../../functions/sortArray'
-import { Zoom } from 'react-awesome-reveal'
+import { Slide, Zoom } from 'react-awesome-reveal'
 import ProfileHeader from '../profileHeader/ProfileHeader'
 import { follow } from '../../axios/axios'
+import Skeleton from 'react-loading-skeleton'
+import { updateUser } from '../../features/auth/authSlice'
 
 function Profile() {
     const navigate = useNavigate()
     const { user } = useSelector(state => state.authReducer)
     const posts = useSelector(state => state.postReducer)
+    const dispatch = useDispatch()
     const [postsData, setPostsData] = useState([])
-    const [followers, setFollowers] = useState()
-    const [followings, setFollowings] = useState()
+    const [followers, setFollowers] = useState(user?.followers)
+    const [followings, setFollowings] = useState(user?.followings)
 
     useEffect(() => {
         if (!user) {
@@ -30,14 +33,20 @@ function Profile() {
             try {
 
                 // get total followers
-                let followersData = await follow.get(`/gettotalfollowers/${user.profileId}`)
+                let followersData = await follow.get(`/gettotalfollowers/${user?.profileId}`)
                 followersData = followersData.data.data.totalFollowers
-                setFollowers(followersData)
+                if (user.followers !== followersData) {
+                    setFollowers(followersData)
+                    dispatch(updateUser({ followers: followersData }))
+                }
 
                 // get total followings
-                let followingData = await follow.get(`/gettotalfollowing/${user.profileId}`)
-                followingData = followingData.data.data.totalFollowings
-                setFollowings(followingData)
+                let followingsData = await follow.get(`/gettotalfollowings/${user?.profileId}`)
+                followingsData = followingsData.data.data.totalFollowings
+                if (user.followings !== followingsData) {
+                    setFollowings(followingsData)
+                    dispatch(updateUser({ followings: followingsData }))
+                }
 
             } catch (error) {
                 console.log(error);
@@ -45,7 +54,7 @@ function Profile() {
         }
         fetchData()
     }, [])
-    
+
     return (
         <>
             <div className='max-w-xl mx-auto'>
@@ -76,21 +85,32 @@ function Profile() {
                                     </button>
                                 </div>
                                 {/* follower following posts */}
+                                {/* large screen */}
                                 <div className=' hidden md:flex flex-row justify-start space-x-11'>
-                                    <p className='select-none font-semibold text-base text-gray-800'>
-                                        {postsData.map(data => { return data?.profileId === user?.profileId }).length}
+                                    <p className='select-none font-semibold text-base text-gray-800 flex'>
+                                        <Slide triggerOnce direction='up' duration={150}>
+                                            {
+                                                postsData.map(data => { return data?.profileId === user?.profileId }).length
+                                            }
+                                        </Slide>
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                             Posts
                                         </span>
                                     </p>
-                                    <p className='select-none font-semibold text-base text-gray-800'>
-                                        {followers}
+                                    <p onClick={() => { followers > 0 && navigate(`/profile/${user?.username}/followers`) }} className='cursor-pointer select-none font-semibold text-base text-gray-800 flex'>
+                                        {
+                                            followers?.toString() ? <Slide triggerOnce direction='down' duration={150}>{followers}</Slide> :
+                                                <Skeleton baseColor="#d4d4d4" highlightColor="#858383" width={10} height={15} />
+                                        }
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                             followers
                                         </span>
                                     </p>
-                                    <p className='select-none font-semibold text-base text-gray-800'>
-                                        {followings}
+                                    <p onClick={() => { followings > 0 && navigate(`/profile/${user?.username}/followings`) }} className='cursor-pointer select-none font-semibold text-base text-gray-800 flex'>
+                                        {
+                                            followings?.toString() ? <Slide triggerOnce direction='down' duration={150}>{followings}</Slide> :
+                                                <Skeleton baseColor="#d4d4d4" highlightColor="#858383" width={10} height={15} />
+                                        }
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                             following
                                         </span>
@@ -115,20 +135,30 @@ function Profile() {
                         </div>
                         {/* mobile view */}
                         <div className='md:hidden flex flex-row justify-around py-2 mt-6 space-x-11 border-t border-b'>
-                            <p className='font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
-                                {postsData.map(data => { return data?.profileId === user?.profileId }).length}
+                            <p className='font-semibold select-none text-base text-gray-800 flex flex-col items-center justify-center'>
+                                <Slide triggerOnce direction='up' duration={150}>
+                                    {
+                                        postsData?.map(data => { return data?.profileId === user?.profileId }).length
+                                    }
+                                </Slide>
                                 <span className='text-sm font-normal text-zinc-800'>
                                     Posts
                                 </span>
                             </p>
-                            <p className='font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
-                                {followers}
+                            <p onClick={() => { followers > 0 && navigate(`/profile/${user?.username}/followers`) }} className='cursor-pointer select-none font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
+                                {
+                                    followers?.toString() ? <Slide triggerOnce direction='up' duration={150}>{followers}</Slide> :
+                                        <Skeleton baseColor="#d4d4d4" highlightColor="#858383" width={10} height={15} />
+                                }
                                 <span className='text-sm ml-2 font-normal text-zinc-800'>
                                     followers
                                 </span>
                             </p>
-                            <p className='font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
-                                {followings}
+                            <p onClick={() => { followings > 0 && navigate(`/profile/${user?.username}/followings`) }} className='cursor-pointer select-none font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
+                                {
+                                    followings?.toString() ? <Slide triggerOnce direction='up' duration={150}>{followings}</Slide> :
+                                        <Skeleton baseColor="#d4d4d4" highlightColor="#858383" width={10} height={15} />
+                                }
                                 <span className='text-sm ml-2 font-normal text-zinc-800'>
                                     following
                                 </span>
