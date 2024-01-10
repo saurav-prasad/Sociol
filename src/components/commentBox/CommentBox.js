@@ -63,13 +63,13 @@ function CommentBox({ profilePhoto, profileId, username, postId, }) {
                     name='comment'
                     value={data?.comment}
                     onChange={onChange}
-                    className='w-full outline-0 text-lg overflow-hidden resize-none	'
+                    className='w-full p-1 outline-0 text-lg overflow-hidden resize-none	'
                     placeholder='Add a comment' id="" cols="" rows="1" />
                 <button
                     type="button"
                     onClick={onSubmit}
                     disabled={data.comment.length <= 0}
-                    className="cursor-pointer flex mt-5 w-28 h-8 justify-center items-center rounded-md bg-blue-600 py-1 px-2 text-sm font-medium leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    className="cursor-pointer flex w-28 h-8 justify-center items-center rounded-md bg-blue-600 py-1 px-2 text-sm font-medium leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                 >
                     {commentStatus ? <span className="loader text-[3px] h-[5px] w-[5px]" /> :
                         'Comment'}

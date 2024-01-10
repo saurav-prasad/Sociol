@@ -130,7 +130,7 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
                                     value={data}
                                     onClick={onChange}
                                     onChange={onChange}
-                                    className='w-full outline-0 text-lg overflow-hidden resize-none	'
+                                    className='mt-3 p-1 w-full outline-0 text-lg overflow-hidden resize-none	'
                                     placeholder='Add a comment' id="" />
                                 <div>
                                     <button
@@ -151,7 +151,7 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
                                     </button>
                                 </div>
                             </div> :
-                            <p className='text-left  text-slate-800'>
+                            <p className='text-left mt-2  text-slate-800'>
                                 {commentText}
                             </p>
 

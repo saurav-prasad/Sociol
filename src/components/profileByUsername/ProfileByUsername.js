@@ -1,10 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PostCard, { PostCardSkeleton } from '../postCard/PostCard'
-import { Power } from 'lucide-react'
 import { useNavigate, useParams } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { signOut } from '../../features/auth/authSlice'
-import sortArray from '../../functions/sortArray'
+import { useSelector } from 'react-redux'
 import { Zoom } from 'react-awesome-reveal'
 import { follow, post, profile } from '../../axios/axios'
 import ProfileHeader from '../profileHeader/ProfileHeader'
@@ -18,30 +15,35 @@ function ProfileByUsername() {
     const [ifFollow, setIfFollow] = useState(false)
     const [followings, setFollowings] = useState()
     const [followers, setFollowers] = useState()
-
+    const [followStatus, setFollowStatus] = useState(false)
 
     const handelFollow = async (e) => {
         e.preventDefault()
-        // TODO fix the backend first
+        setFollowStatus(true)
         try {
             if (ifFollow) {
-                const unfollow = await follow.get(`/unfollow/${data._id}`, {
+                await follow.get(`/unfollow/${data._id}`, {
                     headers: {
                         'auth-token': user?.token
                     }
                 })
-                console.log(unfollow);
+                setFollowers(followers - 1)
+                setIfFollow(!ifFollow)
+                setFollowStatus(false)
             }
             else if (!ifFollow) {
-                const followNew = await follow.get(`/createfollow/${data._id}`, {
+                await follow.get(`/createfollow/${data._id}`, {
                     headers: {
                         'auth-token': user?.token
                     }
                 })
-                console.log(followNew);
+                setFollowers(followers + 1)
+                setIfFollow(!ifFollow)
+                setFollowStatus(false)
             }
 
         } catch (error) {
+            setFollowStatus(false)
             console.log(error);
         }
     }
@@ -73,22 +75,14 @@ function ProfileByUsername() {
                     setIfFollow(checkFollow)
 
 
-                    // get followers
-                    let followersData = await follow.get(`/followers/${profileData._id}`, {
-                        headers: {
-                            'auth-token': user?.token
-                        }
-                    })
-                    followersData = followersData.data.data
+                    // get total followers
+                    let followersData = await follow.get(`/gettotalfollowers/${profileData._id}`)
+                    followersData = followersData.data.data.totalFollowers
                     setFollowers(followersData)
 
-                    // get followings
-                    let followingData = await follow.get(`/following`, {
-                        headers: {
-                            'auth-token': user?.token
-                        }
-                    })
-                    followingData = followingData.data.data
+                    // get total followings
+                    let followingData = await follow.get(`/gettotalfollowing/${profileData._id}`)
+                    followingData = followingData.data.data.totalFollowings
                     setFollowings(followingData)
 
                     // get all posts
@@ -124,11 +118,16 @@ function ProfileByUsername() {
                                         {data?.username}
                                     </h1>
                                     <button
+                                        type="submit"
                                         onClick={handelFollow}
-                                        type="button"
-                                        className="h-7 rounded-md bg-sky-500  px-2 py-1 text-xs md:text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-900"
+                                        disabled={!setFollowStatus}
+                                        className="flex justify-center items-center rounded-md bg-sky-500 px-2 py-1 text-xs font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-900 h-7 w-18"
                                     >
-                                        {ifFollow ? 'UnFollow' : 'Follow'}
+                                        {
+                                            followStatus ?
+                                                < span className="loader mx-6 text-[2px] h-[4px] w-[4px]" /> :
+                                                ifFollow ? 'UnFollow' : 'Follow'
+                                        }
                                     </button>
                                 </div>
                                 {/* follower following posts */}
@@ -141,13 +140,13 @@ function ProfileByUsername() {
                                         </span>
                                     </p>
                                     <p className='select-none font-semibold text-base text-gray-800'>
-                                        {followers?.length}
+                                        {followers}
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                             followers
                                         </span>
                                     </p>
                                     <p className='select-none font-semibold text-base text-gray-800'>
-                                        {followings?.length}
+                                        {followings}
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                             following
                                         </span>
@@ -179,13 +178,13 @@ function ProfileByUsername() {
                                 </span>
                             </p>
                             <p className='font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
-                                {followers?.length}
+                                {followers}
                                 <span className='text-sm ml-2 font-normal text-zinc-800'>
                                     followers
                                 </span>
                             </p>
                             <p className='font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
-                                {followings?.length}
+                                {followings}
                                 <span className='text-sm ml-2 font-normal text-zinc-800'>
                                     following
                                 </span>

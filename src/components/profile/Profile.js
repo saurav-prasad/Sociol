@@ -5,12 +5,15 @@ import { useSelector } from 'react-redux'
 import sortArray from '../../functions/sortArray'
 import { Zoom } from 'react-awesome-reveal'
 import ProfileHeader from '../profileHeader/ProfileHeader'
+import { follow } from '../../axios/axios'
 
 function Profile() {
     const navigate = useNavigate()
     const { user } = useSelector(state => state.authReducer)
     const posts = useSelector(state => state.postReducer)
     const [postsData, setPostsData] = useState([])
+    const [followers, setFollowers] = useState()
+    const [followings, setFollowings] = useState()
 
     useEffect(() => {
         if (!user) {
@@ -22,12 +25,33 @@ function Profile() {
         setPostsData(a)
     }, [posts])
 
+    useEffect(() => {
+        async function fetchData() {
+            try {
+
+                // get total followers
+                let followersData = await follow.get(`/gettotalfollowers/${user.profileId}`)
+                followersData = followersData.data.data.totalFollowers
+                setFollowers(followersData)
+
+                // get total followings
+                let followingData = await follow.get(`/gettotalfollowing/${user.profileId}`)
+                followingData = followingData.data.data.totalFollowings
+                setFollowings(followingData)
+
+            } catch (error) {
+                console.log(error);
+            }
+        }
+        fetchData()
+    }, [])
+    
     return (
         <>
             <div className='max-w-xl mx-auto'>
+                {/* Profile page header */}
+                <ProfileHeader />
                 <Zoom duration={150} triggerOnce>
-                    {/* Profile page header */}
-                    <ProfileHeader />
                     {/* Profile infos */}
                     <div className='sm:pt-8 max-w-xl mx-auto px-2 sm:border-b sm:pb-6'>
                         <div className=' flex flex-row justify-start'>
@@ -60,13 +84,13 @@ function Profile() {
                                         </span>
                                     </p>
                                     <p className='select-none font-semibold text-base text-gray-800'>
-                                        24
+                                        {followers}
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                             followers
                                         </span>
                                     </p>
                                     <p className='select-none font-semibold text-base text-gray-800'>
-                                        965
+                                        {followings}
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
                                             following
                                         </span>
@@ -89,6 +113,7 @@ function Profile() {
                                 </div>
                             </div>
                         </div>
+                        {/* mobile view */}
                         <div className='md:hidden flex flex-row justify-around py-2 mt-6 space-x-11 border-t border-b'>
                             <p className='font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
                                 {postsData.map(data => { return data?.profileId === user?.profileId }).length}
@@ -97,13 +122,13 @@ function Profile() {
                                 </span>
                             </p>
                             <p className='font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
-                                24
+                                {followers}
                                 <span className='text-sm ml-2 font-normal text-zinc-800'>
                                     followers
                                 </span>
                             </p>
                             <p className='font-semibold text-base text-gray-800 flex flex-col items-center justify-center'>
-                                965
+                                {followings}
                                 <span className='text-sm ml-2 font-normal text-zinc-800'>
                                     following
                                 </span>

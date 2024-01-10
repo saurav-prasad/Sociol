@@ -24,6 +24,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
     const [ifLiked, setIfLiked] = useState(false)
     const [toggleComment, setToggleComment] = useState(false)
     const [deleteStatus, setDeleteStatus] = useState(false)
+    const [likeStatus, setLikeStatus] = useState(false)
 
     const onUpdate = () => {
         navigate(`/updatepost/${id}`)
@@ -46,6 +47,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
     }
 
     const onLikeClick = throttle(async () => {
+        setLikeStatus(true)
         try {
             if (ifLiked) {
                 if (like >= 1) {
@@ -56,6 +58,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                         }
                     })
                     unlike.data.data.unLiked && dispatch(updatePost({ _id: id, like: like - 1 }))
+                    setLikeStatus(false)
                 }
             }
             else if (!ifLiked) {
@@ -66,9 +69,11 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                     }
                 })
                 likePost.data.data.liked && dispatch(updatePost({ _id: id, like: like + 1 }))
+                setLikeStatus(false)
             }
 
         } catch (error) {
+            setLikeStatus(false)
             console.log(error);
         }
     }, 1000)
@@ -119,7 +124,6 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                                             </div>
                                         </div>
                                         <div className='w-full text-left '>
-                                            {/* <span onClick={onDelete} className='w-full select-none font-medium text-gray-700'>Delete</span> */}
                                             <button
                                                 type="submit"
                                                 onClick={onDelete}
@@ -156,7 +160,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                     className="h-auto w-full object-contain"
                 />}
                 {/* total likes */}
-                <div className='flex flex-row items-center justify-between px-2 mt-3'>
+                <div className='flex select-none flex-row items-center justify-between px-2 mt-3'>
                     <div>
                         <span className='w-full mr-2 text-left text-base font-semibold text-slate-700'>{like}
                             <span className='text-xs font-medium ml-1 text-slate-500'>Likes</span>
@@ -165,18 +169,19 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                             <span className='text-xs font-medium ml-1 text-slate-500'>Comments</span>
                         </span>
                     </div>
-                    <span className='text-xs font-medium ml-2 text-slate-500'>{timePassed(timestamp)}</span>
+                    {/* timespassed */}
+                    <span className='select-none text-xs font-medium ml-2 text-slate-500'>{timePassed(timestamp)}</span>
                 </div>
                 {/* Like and comment */}
                 <div className='flex justify-around pt-1 border-t'>
-                    <div onClick={onLikeClick} className={`${ifLiked ? 'active:scale-90' : 'active:scale-110'} active:transition-all duration-200  ease-in-out select-none p-2 flex items-center cursor-pointer  ${ifLiked ? 'text-blue-600' : 'text-zinc-500'}`}>
+                    <button disabled={likeStatus} onClick={onLikeClick} className={`${ifLiked ? 'active:scale-90' : 'active:scale-110'} active:transition-all duration-200  ease-in-out select-none p-2 flex items-center cursor-pointer  ${ifLiked ? 'text-blue-600' : 'text-zinc-500'}`}>
                         <ThumbUpRoundedIcon fontSize='medium' className='scale-x-[-1] ' />
-                        <span className='font-medium ml-1 text-sm'>Like</span>
-                    </div>
+                        <span className=' font-medium ml-1 text-sm'>Like</span>
+                    </button>
 
                     <div onClick={() => setToggleComment(!toggleComment)} className={`${toggleComment ? 'active:scale-90' : 'active:scale-110'}  select-none duration-200 p-2 flex items-center cursor-pointer ease-in-out ${toggleComment ? 'text-blue-600' : 'text-zinc-500'} active:transition-all`}>
                         <CommentRoundedIcon fontSize='medium' className='' />
-                        <span className='font-medium text-sm ml-1'>Comment</span>
+                        <span className=' font-medium text-sm ml-1'>Comment</span>
                     </div>
                 </div>
                 {
