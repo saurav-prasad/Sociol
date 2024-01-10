@@ -52,23 +52,23 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
             if (ifLiked) {
                 if (like >= 1) {
                     setIfLiked(false)
-                    const unlike = await liked.get(`/unlike/${id}`, {
+                    dispatch(updatePost({ _id: id, like: like - 1 }))
+                    await liked.get(`/unlike/${id}`, {
                         headers: {
                             "auth-token": user.token
                         }
                     })
-                    unlike.data.data.unLiked && dispatch(updatePost({ _id: id, like: like - 1 }))
                     setLikeStatus(false)
                 }
             }
             else if (!ifLiked) {
                 setIfLiked(true)
-                const likePost = await liked.get(`/like/${id}`, {
+                dispatch(updatePost({ _id: id, like: like + 1 }))
+                await liked.get(`/like/${id}`, {
                     headers: {
                         "auth-token": user.token
                     }
                 })
-                likePost.data.data.liked && dispatch(updatePost({ _id: id, like: like + 1 }))
                 setLikeStatus(false)
             }
 
