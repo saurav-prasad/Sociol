@@ -11,10 +11,9 @@ import UpdateProfile from './components/updateProfile/UpdateProfile';
 import Error from './components/error/Error';
 import Auth from './components/signinSignup/Auth';
 import SigninSignup from './components/signinSignup/SigninSignup';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { auth, follow, post } from './axios/axios';
-import { signIn } from './features/auth/authSlice';
+import { post } from './axios/axios';
 import { createPost } from './features/post/postSlice';
 import UpdatePost from './components/updatePost/UpdatePost';
 import ProfileByUsername from './components/profileByUsername/ProfileByUsername';
@@ -22,51 +21,6 @@ import Network from './components/network/Network';
 
 function App() {
   const dispatch = useDispatch()
-  const [authStatus, setAuthStatus] = useState(false)
-
-  // fetching users data
-  useEffect(() => {
-    async function fetchUser() {
-      if (localStorage.getItem('auth-token')) {
-        setAuthStatus(true)
-        try {
-          let signinRequest = await auth.get('/fetchuser', {
-            headers: {
-              'auth-token': localStorage.getItem('auth-token')
-            }
-          })
-
-          signinRequest = signinRequest.data.data
-
-          let userData = {
-            ...signinRequest,
-            token: localStorage.getItem('auth-token'),
-
-          }
-          // get total followers
-          if (signinRequest) {
-            let followersData = await follow.get(`/gettotalfollowers/${signinRequest?.profileId}`)
-            followersData = followersData.data.data.totalFollowers
-
-            // get total followings
-            let followingData = await follow.get(`/gettotalfollowings/${signinRequest?.profileId}`)
-            followingData = followingData.data.data.totalFollowings
-            userData = {
-              ...userData, followings: followingData,
-              followers: followersData
-            }
-          }
-
-          dispatch(signIn(userData))
-          setAuthStatus(false)
-        } catch (error) {
-          console.log(error);
-          setAuthStatus(false)
-        }
-      }
-    }
-    fetchUser()
-  }, [])
 
   // fetching all the posts
   useEffect(() => {
@@ -168,12 +122,6 @@ function App() {
 
   return (
     <div className="App relative min-h-screen bg-slate-50 text-gray-900">
-
-      {authStatus &&
-        <p className='fixed top-3/4 text-2xl w-full text-center font-semibold text-fuchsia-500'>
-          Loggin-in please wait...
-        </p>}
-
       <RouterProvider router={router} />
     </div>
   );

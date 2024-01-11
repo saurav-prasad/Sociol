@@ -6,6 +6,7 @@ import { Slide, Zoom } from 'react-awesome-reveal'
 import { follow, post, profile } from '../../axios/axios'
 import ProfileHeader from '../profileHeader/ProfileHeader'
 import Skeleton from 'react-loading-skeleton'
+import sortArray from '../../functions/sortArray'
 
 function ProfileByUsername() {
     const navigate = useNavigate()
@@ -85,7 +86,8 @@ function ProfileByUsername() {
 
                     // get all posts
                     let posts = await post.get(`/getpostbyprofileid/${profileData?._id}`)
-                    setPostsData(posts.data.data)
+                    posts = sortArray(posts.data.data)
+                    setPostsData(posts)
                 }
             } catch (error) {
                 console.log(error);

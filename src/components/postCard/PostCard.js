@@ -155,7 +155,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                         sliceString(text, more ? 0 : 150)
                     }
                     {(text && text.length > 150) &&
-                        <span onClick={() => { setMore(!more) }} className='whitespace-nowrap select-none cursor-pointer text-xs px-2 py-1 text-center'>&nbsp;&nbsp; Read {more ? 'less' : 'more'}</span>}
+                        <span onClick={() => { setMore(!more) }} className='whitespace-nowrap select-none cursor-pointer text-xs px-2 py-1 text-center'>&nbsp;Read {more ? 'less' : 'more'}</span>}
 
                 </div>
                 {/* Post image */}

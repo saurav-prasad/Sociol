@@ -14,6 +14,7 @@ function SigninSignup() {
     const [error, setError] = useState("")
     const pathname = useLocation().pathname
     const { user } = useSelector(state => state.authReducer)
+    const [authStatus, setAuthStatus] = useState(false)
 
     const navigate = useNavigate()
 
@@ -88,10 +89,42 @@ function SigninSignup() {
         }
     }
 
+    // fetching users data by aut token
+    useEffect(() => {
+        async function fetchUser() {
+            if (localStorage.getItem('auth-token')) {
+                setAuthStatus(true)
+                try {
+                    let signinRequest = await auth.get('/fetchuser', {
+                        headers: {
+                            'auth-token': localStorage.getItem('auth-token')
+                        }
+                    })
+
+                    signinRequest = signinRequest.data.data
+
+                    let userData = {
+                        ...signinRequest,
+                        token: localStorage.getItem('auth-token'),
+
+                    }
+
+                    dispatch(signIn(userData))
+                    setAuthStatus(false)
+                    navigate('/')
+
+                } catch (error) {
+                    console.log(error);
+                    setAuthStatus(false)
+                }
+            }
+        }
+        fetchUser()
+    }, [])
 
     return (
         <>
-            <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+            <div className="relative flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
                 {/* header */}
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
@@ -103,6 +136,10 @@ function SigninSignup() {
                         {pathname === "/signin" ? 'Sign-in' : 'Sign-up'} in to your account
                     </h2>
                 </div>
+                {authStatus &&
+                    <p className='fixed top-3/4 text-2xl w-full text-center font-semibold text-fuchsia-500'>
+                        Loggin-in please wait...
+                    </p>}
 
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm ">
                     <form className="space-y-6" onSubmit={onSubmit}>

@@ -13,7 +13,6 @@ function ProfileHeader() {
         window.scroll(0, 0)
         dispatch(signOut())
         localStorage.removeItem('auth-token')
-        navigate('/auth')
     }
 
     return (
