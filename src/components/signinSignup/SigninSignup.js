@@ -44,6 +44,7 @@ function SigninSignup() {
                 setSubmitStatus(false)
                 signinRequest && navigate('/profile')
                 localStorage.setItem('auth-token', userData.token)
+                navigate('/')
             }
             // signup
             else if (pathname === '/auth/signup') {
@@ -58,6 +59,7 @@ function SigninSignup() {
                 setSubmitStatus(false)
                 signupRequest && navigate('/profile')
                 localStorage.setItem('auth-token', userData.token)
+                navigate('/')
             }
         } catch (error) {
             console.log(error);
@@ -78,7 +80,7 @@ function SigninSignup() {
             setTestSubmitStatus(false)
             navigate('/profile')
             localStorage.setItem('auth-token', userData.token)
-
+            navigate('/')
 
         } catch (err) {
             setError(error?.response?.data?.message)
@@ -86,11 +88,6 @@ function SigninSignup() {
         }
     }
 
-    useEffect(() => {
-        if (user) {
-            navigate('/')
-        }
-    })
 
     return (
         <>

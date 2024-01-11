@@ -34,7 +34,7 @@ function Profile() {
                     followersData = followersData.data.data.totalFollowers
                     if (user.followers !== followersData) {
                         setFollowers(followersData)
-                        dispatch(updateUser({ followers: followersData }))
+                        user && dispatch(updateUser({ followers: followersData }))
                     }
 
                     // get total followings
@@ -42,7 +42,7 @@ function Profile() {
                     followingsData = followingsData.data.data.totalFollowings
                     if (user.followings !== followingsData) {
                         setFollowings(followingsData)
-                        dispatch(updateUser({ followings: followingsData }))
+                        user && dispatch(updateUser({ followings: followingsData }))
                     }
                 }
 

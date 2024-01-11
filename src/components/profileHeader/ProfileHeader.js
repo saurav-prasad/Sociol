@@ -10,10 +10,12 @@ function ProfileHeader() {
     const navigate = useNavigate()
 
     const handelSignout = () => {
+        window.scroll(0, 0)
         dispatch(signOut())
         localStorage.removeItem('auth-token')
         navigate('/auth')
     }
+
     return (
         <>
             {/* Profile page header */}
