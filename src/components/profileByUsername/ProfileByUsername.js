@@ -62,7 +62,7 @@ function ProfileByUsername() {
                     setData(profileData)
 
                     // check if follow
-                    let checkFollow = await follow.get(`/iffollow/${profileData._id}`, {
+                    let checkFollow = await follow.get(`/iffollow/${profileData?._id}`, {
                         headers: {
                             'auth-token': user?.token
                         }
@@ -72,17 +72,17 @@ function ProfileByUsername() {
 
 
                     // get total followers
-                    let followersData = await follow.get(`/gettotalfollowers/${profileData._id}`)
+                    let followersData = await follow.get(`/gettotalfollowers/${profileData?._id}`)
                     followersData = followersData.data.data.totalFollowers
                     setFollowers(followersData)
 
                     // get total followings
-                    let followingData = await follow.get(`/gettotalfollowings/${profileData._id}`)
+                    let followingData = await follow.get(`/gettotalfollowings/${profileData?._id}`)
                     followingData = followingData.data.data.totalFollowings
                     setFollowings(followingData)
 
                     // get all posts
-                    let posts = await post.get(`/getpostbyprofileid/${profileData._id}`)
+                    let posts = await post.get(`/getpostbyprofileid/${profileData?._id}`)
                     setPostsData(posts.data.data)
                 }
             } catch (error) {
@@ -108,7 +108,7 @@ function ProfileByUsername() {
                                         <img className="select-none md:h-40 md:w-40 h-28 p-1 w-28 rounded-full border border-y-purple-600 border-x-violet-500 object-cover "
                                             src={data?.profilePhoto}
                                             alt='' /> :
-                                        <Skeleton width={100} height={100} circle borderRadius={50} />
+                                        <Skeleton baseColor="#d4d4d4" highlightColor="#858383" width={100} height={100} circle borderRadius={50} />
                                 }
                             </div>
                             {/* Profile name and follow button */}

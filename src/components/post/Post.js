@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PostCard, { PostCardSkeleton } from '../postCard/PostCard'
 import { useSelector } from 'react-redux'
 import sortArray from '../../functions/sortArray'
-import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
-import { Link } from 'react-router-dom'
+import ProfileCarousel from '../profileCarousel/ProfileCarousel'
 
 function Post() {
 
@@ -16,6 +15,7 @@ function Post() {
 
     return (
         <>
+            <ProfileCarousel />
             <div className='max-w-lg mx-auto'>
                 {
                     postsData ?

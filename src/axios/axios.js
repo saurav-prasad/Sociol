@@ -1,6 +1,6 @@
 import axios from "axios";
-const URL = 'https://sociol-backend.vercel.app'
-const URLl = 'http://localhost:5000'
+const URLl = 'https://sociol-backend.vercel.app'
+const URL = 'http://localhost:5000'
 
 export const auth = axios.create({
     baseURL: `${URL}/auth`

@@ -9,18 +9,17 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import 'swiper/css/scrollbar';
 import { useEffect, useState } from 'react';
-import { profile } from '../axios/axios';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useNavigate } from 'react-router-dom';
+import { profile } from '../../axios/axios';
 
-function Test() {
+function ProfileCarousel() {
     const [data, setData] = useState()
 
     useEffect(() => {
         async function fetchData() {
             let profilesData = await profile.get('/getallprofile')
             profilesData = profilesData.data.data
-            console.log(profilesData);
             setData(profilesData)
         }
         fetchData()
@@ -38,7 +37,7 @@ function Test() {
                 {
                     data ?
                         data.map((e) =>
-                            <SwiperSlide>
+                            <SwiperSlide key={e.id}>
                                 <ProfileIcon username={e.username} profilePhoto={e.profilePhoto} />
                             </SwiperSlide>
                         ) :
@@ -61,13 +60,13 @@ function Test() {
     )
 }
 
-export default Test
+export default ProfileCarousel
 
 export const ProfileIcon = ({ username, profilePhoto }) => {
     const navigate = useNavigate()
     return (
         <>
-            <div onClick={()=>{navigate(`/profile/${username}`)}} className='cursor-pointer select-none flex flex-col items-center justify-center'>
+            <div onClick={() => { navigate(`/profile/${username}`) }} className='cursor-pointer select-none flex flex-col items-center justify-center'>
                 <img className="select-none md:h-20 md:w-20 h-16 w-16 rounded-full border-2 border-y-purple-600 border-x-violet-500 p-[3px] object-cover "
                     src={profilePhoto}
                     alt='' />
