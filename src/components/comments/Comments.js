@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { comment } from '../../axios/axios';
 import { deleteComment, updateComment } from '../../features/comment/commentSlice';
 import { updatePost } from '../../features/post/postSlice';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -18,6 +19,7 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
     const [data, setData] = useState(commentText)
     const textareaRef = useRef(null)
     const [deleteStatus, setDeleteStatus] = useState(false)
+    const navigate = useNavigate()
 
     const onDelete = async () => {
         setDeleteStatus(true)
@@ -77,15 +79,18 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
 
     return (
         <div className='flex flex-row items-start px-2'>
-            <div className='mr-2 flex-shrink-0'>
+            {/* user image */}
+            <div onClick={() => { navigate(`/profile/${username}`) }} className='mr-2 flex-shrink-0'>
                 <img
                     className='rounded-full cursor-pointer w-8 h-8 object-cover'
                     src={profilePhoto} alt={username} />
             </div>
             <div className='w-full bg-[#fbfaf8] rounded px-3 py-2'>
                 <div className='w-full flex flex-row items-center justify-between'>
+                    {/* username */}
                     <span className='text-left mr-2 font-semibold cursor-pointer text-slate-900'>{username}</span>
                     <div className='flex flex-row items-center justify-between'>
+                        {/* commented time */}
                         <span className='text-xs font-medium mr-2 text-slate-500'>{timePassed(timestamp)}</span>
                         {/* menu */}
                         {profileId === user?.profileId &&
@@ -112,7 +117,8 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
                                                             <span className="loader text-[3px] h-[5px] w-[5px]" /> :
                                                             <span className='w-full text-left font-medium text-base'>Delete</span>
                                                     }
-                                                </button>                                            </div>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                 }
@@ -120,7 +126,9 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
                         }
                     </div>
                 </div>
+                {/* update section */}
                 <div className='w-full'>
+                    {/* update buttons */}
                     {
                         updateStatus ?
                             <div className='w-full flex flex-row items-end border-b'>
@@ -151,6 +159,7 @@ function Comments({ profilePhoto, username, postId, commentText, commentId, prof
                                     </button>
                                 </div>
                             </div> :
+                            // comment texts
                             <p className='text-left mt-2  text-slate-800'>
                                 {commentText}
                             </p>

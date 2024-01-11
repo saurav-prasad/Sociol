@@ -18,13 +18,13 @@ import { signIn } from './features/auth/authSlice';
 import { createPost } from './features/post/postSlice';
 import UpdatePost from './components/updatePost/UpdatePost';
 import ProfileByUsername from './components/profileByUsername/ProfileByUsername';
-import Test from './components/Test';
 import Network from './components/network/Network';
 
 function App() {
   const dispatch = useDispatch()
   const [authStatus, setAuthStatus] = useState(false)
 
+  // fetching users data
   useEffect(() => {
     async function fetchUser() {
       if (localStorage.getItem('auth-token')) {
@@ -68,7 +68,7 @@ function App() {
     fetchUser()
   }, [])
 
-
+  // fetching all the posts
   useEffect(() => {
     async function fetchUser() {
       let fetchPosts = await post.get('/getallpost')
@@ -77,7 +77,7 @@ function App() {
     fetchUser()
   }, [])
 
-
+  // navigation bar items
   const navbarList = [
     {
       icon: <HomeIcon className="h-6 w-6" aria-hidden="true" />,
@@ -90,6 +90,7 @@ function App() {
       href: '/createpost'
     },
   ]
+
   const router = createBrowserRouter([
     {
       path: '/',
@@ -167,11 +168,12 @@ function App() {
 
   return (
     <div className="App relative min-h-screen bg-slate-50 text-gray-900">
-      {/* <Test/> */}
+
       {authStatus &&
         <p className='fixed top-3/4 text-2xl w-full text-center font-semibold text-fuchsia-500'>
           Loggin-in please wait...
         </p>}
+
       <RouterProvider router={router} />
     </div>
   );

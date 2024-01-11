@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { follow } from '../../axios/axios'
-
+import sliceString from '../../functions/sliceString'
 function Profiles({ profilePhoto, about, username, profileId }) {
     const navigate = useNavigate()
     const [followStatus, setFollowStatus] = useState(false)
@@ -10,6 +10,7 @@ function Profiles({ profilePhoto, about, username, profileId }) {
     const pathname = useLocation().pathname
     const [ifFollow, setIfFollow] = useState(pathname.endsWith('/followings'))
 
+    // handel follo unfollow
     const handelFollow = async (e) => {
         e.preventDefault()
         setFollowStatus(true)
@@ -38,6 +39,7 @@ function Profiles({ profilePhoto, about, username, profileId }) {
             console.log(error);
         }
     }
+
     useEffect(() => {
         async function fetchData() {
             try {
@@ -60,14 +62,16 @@ function Profiles({ profilePhoto, about, username, profileId }) {
 
     return (
         <div className="flex flex-row justify-between items-center select-none bg-white/70 rounded px-2 py-3">
+            {/* profile details */}
             <div className='flex flex-row items-start'>
                 <img onClick={() => navigate(`/profile/${username}`)} className=" cursor-pointer h-12 w-12 object-cover rounded-full border"
                     src={profilePhoto} alt={username} />
                 <div className="ml-3 min-w-0 flex flex-col items-start justify-center">
                     <p onClick={() => navigate(`/profile/${username}`)} className="cursor-pointer truncate text-left text-lg font-semibold text-gray-800">{username}</p>
-                    <p onClick={() => navigate(`/profile/${username}`)} className="cursor-pointer truncate text-left text-sm text-gray-500">{about}</p>
+                    <p onClick={() => navigate(`/profile/${username}`)} className="w-full cursor-pointer truncate text-left text-sm text-gray-500">{sliceString(about, 35)}</p>
                 </div>
             </div>
+            {/* follow unfollow button */}
             {
                 user.profileId !== profileId &&
 

@@ -8,6 +8,7 @@ function Post() {
 
     const [postsData, setPostsData] = useState([])
     const posts = useSelector(state => state.postReducer)
+    
     useEffect(() => {
         const a = sortArray(posts)
         setPostsData(a)
@@ -17,6 +18,7 @@ function Post() {
         <>
             <ProfileCarousel />
             <div className='max-w-lg mx-auto'>
+                {/* postCard component */}
                 {
                     postsData ?
                         postsData.map(data =>

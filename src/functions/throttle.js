@@ -1,10 +1,4 @@
-// const throttle = (fun, delay) => {
-//     return function (...args) {
-//         setTimeout(() => {
-//             fun()
-//         }, delay)
-//     }
-// }
+// restriting the frequent function call
 let timer = null
 const throttle = (callBack, timeOut) => {
     return function () {

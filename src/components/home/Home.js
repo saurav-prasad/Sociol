@@ -5,8 +5,10 @@ import { Outlet, useNavigate } from 'react-router-dom'
 function Home() {
   const navigate = useNavigate()
   const { user } = useSelector(state => state.authReducer)
+  
+  // checking user state
   useEffect(() => {
-    if (!user) {
+    if (!user || !localStorage.getItem('auth-token')) {
       navigate('/auth')
     }
   })

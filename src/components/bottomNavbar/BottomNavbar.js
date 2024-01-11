@@ -9,18 +9,22 @@ function BottomNavbar({ navbarList }) {
     const navigate = useNavigate()
     const { user } = useSelector(state => state.authReducer)
     const dispatch = useDispatch()
+
     const handelSignout = () => {
         window.scrollTo(0, 0);
         dispatch(signOut())
         localStorage.removeItem('auth-token')
+        navigate('/auth')
     }
-    
+
     return (
         <aside className="z-10 xl:hidden fixed bottom-0 w-screen border-t bg-white ">
             <div className="space-x-4 flex justify-around items-center max-w-lg mx-auto">
+                {/* menus */}
                 {
-                    navbarList.map((data) =>
+                    navbarList.map((data, index) =>
                         <span
+                            key={index}
                             onClick={() => { navigate(data.href); window.scrollTo(0, 0); }}
                             className={`cursor-pointer flex flex-col transform items-center rounded-lg px-3 py-1 text-gray-600 transition-colors duration-300 select-none hover:bg-gray-100 hover:text-gray-700`}
                         >
@@ -29,7 +33,7 @@ function BottomNavbar({ navbarList }) {
                         </span>
                     )
                 }
-
+                {/* profile menu */}
                 <span
                     onClick={() => {
                         navigate(user ? '/profile' : '/signin'); window.scrollTo(0, 0);
@@ -43,7 +47,7 @@ function BottomNavbar({ navbarList }) {
                     }
                     <span className=" text-xs font-normal">{user ? 'Profile' : 'Sign-in'}</span>
                 </span>
-
+                {/* logout button */}
                 {user && <>
                     <span
                         onClick={handelSignout}

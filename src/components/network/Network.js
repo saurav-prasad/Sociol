@@ -37,24 +37,27 @@ function Network() {
 
     return (
         <div className="max-w-lg mx-auto">
+            {/* Header */}
             <h1 className="mb-4 text-3xl font-semibold text-gray-800 py-6  ">
                 {pathname.endsWith('/followings') ? "Followings" : "Followers"}
             </h1>
             <div className="flex flex-col space-y-6 ">
+                {/* All profiles */}
                 {
-                    data ? data.map(e =>
+                    data ? data.map((e, index) =>
                         <Profiles
-                            key={e.id}
+                            key={index}
                             profilePhoto={e.profilePhoto}
                             username={e.username}
                             about={e?.about}
                             profileId={e.profileId}
                         />
                     ) :
+                        // sekeleton
                         <SkeletonTheme baseColor="#d4d4d4" highlightColor="#858383" >
                             {
-                                Array.from({ length: 3 }).map((_) =>
-                                    <div className="flex flex-row items-start select-none bg-white/50 rounded px-3 py-3">
+                                Array.from({ length: 3 }).map((e, index) =>
+                                    <div key={index} className="flex flex-row items-start select-none bg-white/50 rounded px-3 py-3">
                                         <Skeleton width={50} height={50} circle borderRadius={50} />
                                         <div className="ml-3 min-w-0 flex flex-col items-start justify-center">
                                             <Skeleton width={100} height={15} />

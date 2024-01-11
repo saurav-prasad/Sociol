@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PostCard, { PostCardSkeleton } from '../postCard/PostCard'
-import { Link, useNavigate, useParams } from 'react-router-dom'
+import {  useNavigate, useParams } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 import { Slide, Zoom } from 'react-awesome-reveal'
 import { follow, post, profile } from '../../axios/axios'
@@ -18,10 +18,12 @@ function ProfileByUsername() {
     const [followers, setFollowers] = useState()
     const [followStatus, setFollowStatus] = useState(false)
 
+    // handel follow unfollow
     const handelFollow = async (e) => {
         e.preventDefault()
         setFollowStatus(true)
         try {
+            // if following
             if (ifFollow) {
                 await follow.get(`/unfollow/${data._id}`, {
                     headers: {
@@ -32,6 +34,7 @@ function ProfileByUsername() {
                 setIfFollow(!ifFollow)
                 setFollowStatus(false)
             }
+            // if not following
             else if (!ifFollow) {
                 await follow.get(`/createfollow/${data._id}`, {
                     headers: {
@@ -69,7 +72,6 @@ function ProfileByUsername() {
                     })
                     checkFollow = checkFollow.data.data.following
                     setIfFollow(checkFollow)
-
 
                     // get total followers
                     let followersData = await follow.get(`/gettotalfollowers/${profileData?._id}`)
@@ -133,6 +135,7 @@ function ProfileByUsername() {
                                 {/* follower following posts */}
                                 {/* Large screen */}
                                 <div className=' hidden md:flex flex-row justify-start space-x-11'>
+                                    {/* user post followers followings numbers */}
                                     <p className='select-none font-semibold text-base text-gray-800 flex'>
                                         {
                                             postsData ? <Slide triggerOnce direction='down' duration={150}>{postsData.length}</Slide> :
@@ -161,6 +164,7 @@ function ProfileByUsername() {
                                         </span>
                                     </p>
                                 </div>
+                                {/* profile details name about bio */}
                                 <div className='flex flex-row justify-start'>
                                     <div className=''>
                                         <p className='font-medium text-left text-base text-zinc-950'>
@@ -180,6 +184,7 @@ function ProfileByUsername() {
                         </div>
                         {/* Mobile screen */}
                         <div className='md:hidden flex flex-row justify-around py-2 mt-6 space-x-11 border-t border-b'>
+                                                                {/* user post followers followings numbers */}
                             <p className='font-semibold select-none text-base text-gray-800 flex flex-col items-center justify-center'>
                                 {
                                     postsData ? <Slide triggerOnce direction='up' duration={150}>{postsData.length}</Slide> :
@@ -212,6 +217,7 @@ function ProfileByUsername() {
                 </Zoom >
                 {/* Profile posts */}
                 < div className='flex flex-col mt-7 px-2 sm:px-6' >
+                    {/* posts data-> postCard component */}
                     {
                         postsData ?
                             postsData.map(data => {

@@ -4,7 +4,7 @@ import { addComment } from '../../features/comment/commentSlice';
 import { comment } from '../../axios/axios';
 import { updatePost } from '../../features/post/postSlice';
 
-function CommentBox({ profilePhoto, profileId, username, postId, }) {
+function CommentBox({postId, }) {
     const dispatch = useDispatch()
     const { user } = useSelector(state => state.authReducer)
     const [data, setData] = useState({ comment: '' })
@@ -52,11 +52,13 @@ function CommentBox({ profilePhoto, profileId, username, postId, }) {
     }
     return (
         <div className='flex mt-1 flex-row items-start px-2 pt-3 border-t'>
+            {/* user image */}
             <div className='mr-2 flex-shrink-0'>
                 <img
                     className='rounded-full w-8 h-8 object-cover'
                     src={user?.profilePhoto} alt={user?.username} />
             </div>
+            {/* comment text and button */}
             <div className='w-full flex flex-row items-end border-b'>
                 <textarea
                     ref={textareaRef}

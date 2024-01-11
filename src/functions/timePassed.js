@@ -1,9 +1,11 @@
+// formatting the timestamp
 const timePassed = (timestamp,) => {
     const startDateTime = new Date(timestamp);
     const currentDateTime = new Date();
 
     // Calculate the time difference in milliseconds
-    const timeDifference = currentDateTime - startDateTime;
+    let timeDifference = currentDateTime - startDateTime;
+    if (timeDifference < 0) timeDifference *= -1
 
     // Convert milliseconds to seconds, minutes, hours, days, months, and years
     const totalSeconds = Math.floor(timeDifference / 1000);
@@ -22,7 +24,7 @@ const timePassed = (timestamp,) => {
     } else if (totalHours < 24) {
         formattedTime = `${totalHours} hr${totalHours !== 1 ? 's' : ''}`;
     } else if (totalDays < 30) {
-        formattedTime = `${totalDays} d${totalDays !== 1 ? 's' : ''}`;
+        formattedTime = `${totalDays} dy${totalDays !== 1 ? 's' : ''}`;
     } else if (totalMonths < 12) {
         formattedTime = `${totalMonths} mo${totalMonths !== 1 ? 's' : ''}`;
     } else {

@@ -25,11 +25,14 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
     const [toggleComment, setToggleComment] = useState(false)
     const [deleteStatus, setDeleteStatus] = useState(false)
     const [likeStatus, setLikeStatus] = useState(false)
+    const [likeCount, setLikeCount] = useState(like)
 
+    // update a post
     const onUpdate = () => {
         navigate(`/updatepost/${id}`)
     }
 
+    // delete a post
     const onDelete = async () => {
         setDeleteStatus(true)
         try {
@@ -46,14 +49,16 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
         }
     }
 
+    // like unlike logic
     const onLikeClick = throttle(async () => {
         setLikeStatus(true)
         try {
             if (ifLiked) {
-                if (like >= 1) {
+                if (likeCount >= 1) {
                     setIfLiked(false)
+                    setLikeCount(likeCount - 1)
                     dispatch(updatePost({ _id: id, like: like - 1 }))
-                    await liked.get(`/unlike/${id}`, {
+                    const a = await liked.get(`/unlike/${id}`, {
                         headers: {
                             "auth-token": user.token
                         }
@@ -63,8 +68,9 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
             }
             else if (!ifLiked) {
                 setIfLiked(true)
+                setLikeCount(likeCount + 1)
                 dispatch(updatePost({ _id: id, like: like + 1 }))
-                await liked.get(`/like/${id}`, {
+                const a = await liked.get(`/like/${id}`, {
                     headers: {
                         "auth-token": user.token
                     }
@@ -162,7 +168,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                 {/* total likes */}
                 <div className='flex select-none flex-row items-center justify-between px-2 mt-3'>
                     <div>
-                        <span className='w-full mr-2 text-left text-base font-semibold text-slate-700'>{like}
+                        <span className='w-full mr-2 text-left text-base font-semibold text-slate-700'>{likeCount}
                             <span className='text-xs font-medium ml-1 text-slate-500'>Likes</span>
                         </span>
                         <span className='w-full text-left text-base font-semibold text-slate-700'>{comment}

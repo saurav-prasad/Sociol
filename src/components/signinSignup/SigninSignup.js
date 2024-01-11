@@ -6,15 +6,18 @@ import { useDispatch, useSelector } from 'react-redux'
 import { signIn } from '../../features/auth/authSlice'
 
 function SigninSignup() {
+
     const dispatch = useDispatch()
     const [data, setData] = useState({ username: "", email: "", phone: "", password: "" })
     const [submitStatus, setSubmitStatus] = useState(false)
     const [testSubmitStatus, setTestSubmitStatus] = useState(false)
     const [error, setError] = useState("")
     const pathname = useLocation().pathname
+    const { user } = useSelector(state => state.authReducer)
 
     const navigate = useNavigate()
 
+    // signin signup change 
     const onSigninSignupClick = () => {
         setError();
         navigate(pathname === '/auth/signup' ? '/auth/signin' : '/auth/signup')
@@ -25,11 +28,12 @@ function SigninSignup() {
         setError()
         setData({ ...data, [e.target.name]: e.target.value })
     }
+
     const onSubmit = async (e) => {
         e?.preventDefault()
         setSubmitStatus(true)
         try {
-
+            // signin
             if (pathname === '/auth/signin') {
                 const signinRequest = await auth.post('/getuser', {
                     email: data.email,
@@ -41,6 +45,7 @@ function SigninSignup() {
                 signinRequest && navigate('/profile')
                 localStorage.setItem('auth-token', userData.token)
             }
+            // signup
             else if (pathname === '/auth/signup') {
                 const signupRequest = await auth.post('/createuser', {
                     email: data.email,
@@ -48,7 +53,6 @@ function SigninSignup() {
                     username: data.username,
                     phone: data?.phone
                 })
-                console.log(signupRequest);
                 const userData = { ...signupRequest.data.data, token: signupRequest.data.token }
                 dispatch(signIn(userData))
                 setSubmitStatus(false)
@@ -61,7 +65,7 @@ function SigninSignup() {
             setSubmitStatus(false)
         }
     }
-    const { user } = useSelector(state => state.authReducer)
+
 
     const testUserSignin = async () => {
         setTestSubmitStatus(true)
@@ -91,6 +95,7 @@ function SigninSignup() {
     return (
         <>
             <div className="flex min-h-full flex-1 flex-col justify-center px-6 py-12 lg:px-8">
+                {/* header */}
                 <div className="sm:mx-auto sm:w-full sm:max-w-sm">
                     <img
                         className="mx-auto h-16 w-auto"
@@ -104,6 +109,7 @@ function SigninSignup() {
 
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm ">
                     <form className="space-y-6" onSubmit={onSubmit}>
+                        {/* username */}
                         {pathname === '/auth/signup' &&
                             <div>
                                 <label htmlFor="email" className="flex text-sm font-medium leading-6  text-gray-900">
@@ -122,6 +128,7 @@ function SigninSignup() {
                                 </div>
                             </div>
                         }
+                        {/* email */}
                         <div>
                             <label htmlFor="email" className="flex text-sm font-medium leading-6  text-gray-900">
                                 Email address<span className='text-red-600 text-lg'>*</span>
@@ -138,6 +145,7 @@ function SigninSignup() {
                                 />
                             </div>
                         </div>
+                        {/* phone */}
                         {pathname === '/auth/signup' &&
                             <div>
                                 <label htmlFor="email" className="flex text-sm font-medium leading-6  text-gray-900">
@@ -153,7 +161,7 @@ function SigninSignup() {
                                     />
                                 </div>
                             </div>}
-
+                        {/* password */}
                         <div>
                             <div className="flex items-center justify-left">
                                 <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
@@ -172,9 +180,11 @@ function SigninSignup() {
                                 />
                             </div>
                         </div>
+                        {/* error texts */}
                         <label className="text-red-600 mt-2 text-sm font-medium ">
                             {error}
                         </label>
+                        {/* signin signup button */}
                         <div>
                             <button
                                 disabled={submitStatus}
@@ -195,6 +205,8 @@ function SigninSignup() {
                             </button>
                         </div>
                     </form>
+
+                    {/* signin signup change */}
                     <p className="mt-10 text-center text-sm text-gray-500">
                         {pathname === '/auth/signin' ? `Don't have an account?${' '}` : `Have an account?${' '}`}
                         <span onClick={onSigninSignupClick} className="cursor-pointer font-semibold leading-6 text-indigo-600 hover:text-indigo-500">

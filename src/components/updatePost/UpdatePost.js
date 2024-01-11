@@ -21,6 +21,7 @@ function UpdatePost() {
     const dispatch = useDispatch()
     const params = useParams()
 
+    // uploading the image from device
     const onImageUpload = (e) => {
         const file = e.target.files[0]
         setCurrImage(file)
@@ -102,6 +103,8 @@ function UpdatePost() {
         }
 
     }
+
+    // if image fails to load
     const onImageLoadError = () => {
         imageRef.current.src = "https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png"
         setImage()
@@ -138,6 +141,7 @@ function UpdatePost() {
                     <label htmlFor="text" className="block text-sm font-medium leading-6 text-gray-900">
                         Write about your post
                     </label>
+                    {/* post texts */}
                     <div className="mt-2">
                         <textarea
                             id="text"
@@ -145,7 +149,7 @@ function UpdatePost() {
                             onChange={onChange}
                             value={data?.text}
                             rows={5}
-                            className="block w-full bg-slate-100 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg text-lg font-medium sm:leading-7 px-2 overflow-hidden resize-none"
+                            className="block w-full bg-slate-100 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg text-lg sm:leading-7 px-2 overflow-hidden resize-none"
                             placeholder='Write a post here...'
                         />
                     </div>
@@ -178,7 +182,7 @@ function UpdatePost() {
 
                     }
                 </div>
-                {/* delete image */}
+                {/* delete image button*/}
                 {image && <button
                     onClick={(e) => { setImage(); e.preventDefault(); setCurrImage() }}
                     type="button"

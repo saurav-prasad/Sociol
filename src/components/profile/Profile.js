@@ -19,34 +19,31 @@ function Profile() {
     const [followings, setFollowings] = useState(user?.followings)
 
     useEffect(() => {
-        if (!user) {
-            navigate('/signin')
-        }
-    })
-    useEffect(() => {
         let a = sortArray(posts)
-         a = a?.filter(data => data.profileId === user?.profileId)
+        a = a?.filter(data => data.profileId === user?.profileId)
         setPostsData(a)
     }, [posts])
 
     useEffect(() => {
         async function fetchData() {
             try {
+                if (user) {
 
-                // get total followers
-                let followersData = await follow.get(`/gettotalfollowers/${user?.profileId}`)
-                followersData = followersData.data.data.totalFollowers
-                if (user.followers !== followersData) {
-                    setFollowers(followersData)
-                    dispatch(updateUser({ followers: followersData }))
-                }
+                    // get total followers
+                    let followersData = await follow.get(`/gettotalfollowers/${user?.profileId}`)
+                    followersData = followersData.data.data.totalFollowers
+                    if (user.followers !== followersData) {
+                        setFollowers(followersData)
+                        dispatch(updateUser({ followers: followersData }))
+                    }
 
-                // get total followings
-                let followingsData = await follow.get(`/gettotalfollowings/${user?.profileId}`)
-                followingsData = followingsData.data.data.totalFollowings
-                if (user.followings !== followingsData) {
-                    setFollowings(followingsData)
-                    dispatch(updateUser({ followings: followingsData }))
+                    // get total followings
+                    let followingsData = await follow.get(`/gettotalfollowings/${user?.profileId}`)
+                    followingsData = followingsData.data.data.totalFollowings
+                    if (user.followings !== followingsData) {
+                        setFollowings(followingsData)
+                        dispatch(updateUser({ followings: followingsData }))
+                    }
                 }
 
             } catch (error) {
@@ -88,6 +85,7 @@ function Profile() {
                                 {/* follower following posts */}
                                 {/* large screen */}
                                 <div className=' hidden md:flex flex-row justify-start space-x-11'>
+                                    {/* user post followers followings numbers */}
                                     <p className='select-none font-semibold text-base text-gray-800 flex'>
                                         <Slide triggerOnce direction='up' duration={150}>
                                             {
@@ -117,6 +115,7 @@ function Profile() {
                                         </span>
                                     </p>
                                 </div>
+                                {/* profile details name about bio */}
                                 <div className='flex flex-row justify-start'>
                                     <div className=''>
                                         <p className='font-medium text-left text-base text-zinc-950'>
@@ -136,10 +135,11 @@ function Profile() {
                         </div>
                         {/* mobile view */}
                         <div className='md:hidden flex flex-row justify-around py-2 mt-6 space-x-11 border-t border-b'>
+                            {/* user post followers followings numbers */}
                             <p className='font-semibold select-none text-base text-gray-800 flex flex-col items-center justify-center'>
                                 <Slide triggerOnce direction='up' duration={150}>
                                     {
-                                        postsData?.map(data => { return data.profileId === user.profileId }).length
+                                        postsData?.map(data => { return data?.profileId === user?.profileId })?.length
                                     }
                                 </Slide>
                                 <span className='text-sm font-normal text-zinc-800'>
@@ -169,6 +169,7 @@ function Profile() {
                 </Zoom>
                 {/* Profile posts */}
                 <div className='flex flex-col mt-7 px-2 sm:px-6'>
+                    {/* posts data -> postCard component */}
                     {
                         postsData ?
                             postsData.map(data => {

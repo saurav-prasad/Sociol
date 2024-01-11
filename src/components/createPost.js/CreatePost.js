@@ -17,6 +17,7 @@ function CreatePost() {
     const [submitStatus, setSubmitStatus] = useState(false)
     const dispatch = useDispatch()
 
+    // on uploading the image from computer
     const onImageUpload = (e) => {
         const file = e.target.files[0]
         setData({
@@ -79,6 +80,8 @@ function CreatePost() {
         }
 
     }
+
+    // if image fails to load
     const onImageLoadError = () => {
         setData({ ...data, image: '' })
         imageRef.current.src = "https://cdn.iconscout.com/icon/free/png-256/free-data-not-found-1965034-1662569.png"
@@ -100,13 +103,14 @@ function CreatePost() {
                     <label htmlFor="text" className="block text-sm font-medium leading-6 text-gray-900">
                         Write about your post
                     </label>
+                    {/* Post texts */}
                     <div className="mt-2">
                         <textarea
                             id="text"
                             name="text"
                             onChange={onChange}
                             rows={5}
-                            className="block w-full bg-slate-100 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg text-lg font-medium sm:leading-7 px-2 overflow-hidden resize-none"
+                            className="block w-full bg-slate-100 rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-lg text-lg sm:leading-7 px-2 overflow-hidden resize-none"
                             defaultValue={''}
                             placeholder='Write a post here...'
                         />
@@ -115,6 +119,7 @@ function CreatePost() {
                 <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
                     Upload an image
                 </label>
+                {/* post image */}
                 <div className={`mt-5 rounded ${!image && 'border border-dashed border-gray-900/25'} flex justify-center flex-col items-center h-auto`}>
                     {!image && <div className="text-center h-60 flex justify-center items-center flex-col">
                         <Image className="mx-auto h-12 w-12 text-gray-300" aria-hidden="true" />
@@ -146,6 +151,7 @@ function CreatePost() {
                 >
                     Delete image
                 </button>}
+                {/* post upload buttons */}
                 <div className='mt-5'>
                     <label className="text-red-600 text-sm font-medium ">
                         {error}

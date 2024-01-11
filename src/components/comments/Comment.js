@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Comments from './Comments'
 import { createComment } from '../../features/comment/commentSlice'
 import sortArray from '../../functions/sortArray'
-import { Bounce, Fade, JackInTheBox, Slide } from 'react-awesome-reveal'
+import { Slide } from 'react-awesome-reveal'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import "react-loading-skeleton/dist/skeleton.css";
 
@@ -42,6 +42,7 @@ function Comment({ postId }) {
     return (
         <>
             <div className='space-y-5 mt-5'>
+                {/* all comments */}
                 {
                     allComments ?
                         allComments.map(data =>
@@ -50,7 +51,7 @@ function Comment({ postId }) {
                                     commentText={data.comment} commentId={data.id} timestamp={data.timestamp} />
                             </Slide>
                         ) :
-                    <CommentSkeleton/>
+                        <CommentSkeleton />
                 }
             </div>
         </>
@@ -62,8 +63,8 @@ export default Comment
 export const CommentSkeleton = () => {
     return <>
         <SkeletonTheme baseColor="#d4d4d4" highlightColor="#858383">
-            {Array.from({ length: 1 }).map(_ =>
-                <div className='flex flex-row items-start px-2'>
+            {Array.from({ length: 1 }).map((e, index) =>
+                <div key={index} className='flex flex-row items-start px-2'>
                     <div className='mr-2 flex-shrink-0'>
                         <Skeleton width={40} height={40} circle borderRadius={50} />
                     </div>

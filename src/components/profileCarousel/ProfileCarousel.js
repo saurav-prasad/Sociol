@@ -50,13 +50,13 @@ function ProfileCarousel() {
                 {
                     data ?
                         data.map((e) =>
-                            <SwiperSlide key={e.id}>
+                            <SwiperSlide key={e.key ?? e.id}>
                                 <ProfileIcon username={e.username} profilePhoto={e.profilePhoto} />
                             </SwiperSlide>
                         ) :
-
-                        Array.from({ length: 5 }).map((_) =>
-                            <SwiperSlide>
+                        // skeleton
+                        Array.from({ length: 5 }).map((e, index) =>
+                            <SwiperSlide key={index}>
                                 <SkeletonTheme baseColor="#d4d4d4" highlightColor="#858383">
                                     <div className='flex flex-col items-center justify-center'>
                                         <Skeleton width={70} height={70} circle borderRadius={50} />
@@ -75,12 +75,13 @@ function ProfileCarousel() {
 
 export default ProfileCarousel
 
+// all profiles
 export const ProfileIcon = ({ username, profilePhoto }) => {
     const navigate = useNavigate()
     return (
         <>
             <div onClick={() => { navigate(`/profile/${username}`) }} className='cursor-pointer select-none flex flex-col items-center justify-center'>
-                <img className="select-none md:h-20 md:w-20 h-16 w-16 rounded-full border-2 border-y-purple-600 border-x-violet-500 p-[3px] object-cover "
+                <img className="select-none md:h-16 md:w-16 h-16 w-16 rounded-full border-2 border-y-purple-600 border-x-violet-500 p-[3px] object-cover "
                     src={profilePhoto}
                     alt='' />
                 <span className='pl-1 truncate md:w-20 w-16'>{username}</span>

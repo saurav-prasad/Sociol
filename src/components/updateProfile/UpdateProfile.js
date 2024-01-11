@@ -87,6 +87,7 @@ function UpdateProfile() {
     setPreImage(user?.profilePhoto)
   }, [user])
 
+  // uploading the image from device
   const onImageUpload = (e) => {
     const file = e.target.files[0]
     setProfilePhoto(file)
@@ -99,17 +100,20 @@ function UpdateProfile() {
     }
   }
 
+  // activation of the input tag from a button
   const handleButtonClick = (e) => {
     e.preventDefault()
     fileInputRef.current.click();
   };
 
+  // if image fails to load
   const handelImageError = (e) => {
     setProfilePhoto()
     setImageError(true)
     testImageRef.current.src = data.profilePhoto
   }
 
+  // loading the image
   const handelImageLoad = (e) => {
     setData({ ...data, profilePhoto: testImageRef.current.src })
   }
@@ -138,7 +142,7 @@ function UpdateProfile() {
                   alt="dp"
                   onLoad={() => setImageError(false)}
                 />
-
+                {/* checking the image */}
                 <img className="hidden"
                   ref={testImageRef}
                   alt="dp"
@@ -147,6 +151,7 @@ function UpdateProfile() {
                 />
 
               </div>
+              {/* selecting the image from device */}
               <input
                 accept='.png, .jpg, jpeg'
                 className='hidden'
@@ -155,6 +160,7 @@ function UpdateProfile() {
                 onChange={onImageUpload}
                 ref={fileInputRef}
               />
+              {/* change image button */}
               <button
                 onClick={handleButtonClick}
                 type="button"
@@ -163,6 +169,7 @@ function UpdateProfile() {
                 Change
               </button>
             </div>
+            {/* error texts */}
             {
               imageError && <label className="text-red-600 text-sm font-medium ">
                 Only use .jpg, .png, jpeg format
@@ -219,7 +226,6 @@ function UpdateProfile() {
                 value={data.about}
                 rows={2}
                 className="block w-full rounded-md border-0 py-1.5 px-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                defaultValue={''}
                 placeholder='What will be your profile heading'
               />
             </div>
@@ -237,7 +243,6 @@ function UpdateProfile() {
                 value={data.bio}
                 onChange={onChange}
                 className="block w-full rounded-md border-0 px-2 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                defaultValue={''}
                 placeholder='Write a few sentences about yourself.'
               />
             </div>
@@ -278,12 +283,13 @@ function UpdateProfile() {
             {error}
           </label>
         </div>
+        {/* buttons */}
         <div className="mt-2 mb-2 flex items-center justify-end gap-x-6">
-          <button 
-          disabled={updateStatus} 
-          onClick={onCancel} 
-          type="button"
-           className="text-sm font-semibold leading-6 text-gray-900">
+          <button
+            disabled={updateStatus}
+            onClick={onCancel}
+            type="button"
+            className="text-sm font-semibold leading-6 text-gray-900">
             Cancel
           </button>
 
@@ -292,7 +298,7 @@ function UpdateProfile() {
             disabled={updateStatus}
             className="flex justify-center items-center rounded-md bg-indigo-600 px-3 py-1 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 h-9 w-16"
           >
-            {updateStatus ? <span className="loader text-[3px] h-[5px] w-[5px]"/> :
+            {updateStatus ? <span className="loader text-[3px] h-[5px] w-[5px]" /> :
               'Save'}
           </button>
         </div>

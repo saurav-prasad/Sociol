@@ -8,20 +8,25 @@ function Navbar({ navbarList }) {
     const navigate = useNavigate()
     const { user } = useSelector(state => state.authReducer)
     const dispatch = useDispatch()
+
     const handelSignOut = () => {
         window.scroll(0, 0)
         dispatch(signOut())
         localStorage.removeItem('auth-token')
     }
+    
     return (
         <aside className="z-10 h-screen hidden xl:flex fixed w-72 flex-col overflow-y-auto border-r bg-white px-10 py-8">
+            {/* header */}
             <h1 className='select-none w-full text-left font-bold text-5xl font-[Whisper] mt-10'>Sociol</h1>
             <div className="mt-10 flex flex-1 flex-col justify-between">
                 <nav className="-mx-3 space-y-10 ">
                     <div className="space-y-4 ">
+                        {/* menu */}
                         {
-                            navbarList.map((data) =>
+                            navbarList.map((data, index) =>
                                 <span
+                                    key={index}
                                     onClick={() => {
                                         navigate(data.href); window.scrollTo(0, 0);
                                     }}
@@ -32,6 +37,7 @@ function Navbar({ navbarList }) {
                                 </span>
                             )
                         }
+                        {/* profile menu */}
                         <span
                             onClick={() => {
                                 navigate(user ? '/profile' : '/auth'); window.scrollTo(0, 0);
@@ -48,6 +54,7 @@ function Navbar({ navbarList }) {
 
                     </div>
                 </nav>
+                {/* logout button */}
                 {
                     user &&
                     <span

@@ -21,6 +21,7 @@ function ProfileHeader() {
 
                 < div className='sm:hidden flex flex-row justify-between items-center px-2 py-1 mb-5 border-b bg-white' >
                     <h1 className='w-full text-left font-bold text-3xl font-[Whisper] select-none'>Sociol</h1>
+                    {/* logout button */}
                     {
                         user && <div>
                             <Power onClick={handelSignout} strokeWidth={3} className='' />
