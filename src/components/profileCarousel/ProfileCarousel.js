@@ -12,18 +12,31 @@ import { useEffect, useState } from 'react';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
 import { useNavigate } from 'react-router-dom';
 import { profile } from '../../axios/axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { addProfiles } from '../../features/profiles/profilesSlice';
 
 function ProfileCarousel() {
     const [data, setData] = useState()
+    const dispatch = useDispatch()
+    const profiles = useSelector(state => state.profilesReducer)
+    const { user } = useSelector(state => state.authReducer)
+
+    useEffect(() => {
+        async function fetchData() {
+            setData(profiles)
+        }
+        fetchData()
+    }, [])
 
     useEffect(() => {
         async function fetchData() {
             let profilesData = await profile.get('/getallprofile')
             profilesData = profilesData.data.data
             setData(profilesData)
+            dispatch(addProfiles(profilesData))
         }
         fetchData()
-    }, [])
+    }, [user])
 
     return (
         <div className='max-w-[38rem] mx-auto pt-3 mb-8 '>
@@ -46,7 +59,7 @@ function ProfileCarousel() {
                             <SwiperSlide>
                                 <SkeletonTheme baseColor="#d4d4d4" highlightColor="#858383">
                                     <div className='flex flex-col items-center justify-center'>
-                                        <Skeleton width={80} height={80} circle borderRadius={50} />
+                                        <Skeleton width={70} height={70} circle borderRadius={50} />
                                         <Skeleton width={70} height={10} />
                                     </div>
                                 </SkeletonTheme>

@@ -279,7 +279,11 @@ function UpdateProfile() {
           </label>
         </div>
         <div className="mt-2 mb-2 flex items-center justify-end gap-x-6">
-          <button disabled={updateStatus} onClick={onCancel} type="button" className="text-sm font-semibold leading-6 text-gray-900">
+          <button 
+          disabled={updateStatus} 
+          onClick={onCancel} 
+          type="button"
+           className="text-sm font-semibold leading-6 text-gray-900">
             Cancel
           </button>
 

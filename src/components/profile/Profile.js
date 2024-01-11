@@ -91,7 +91,7 @@ function Profile() {
                                     <p className='select-none font-semibold text-base text-gray-800 flex'>
                                         <Slide triggerOnce direction='up' duration={150}>
                                             {
-                                                postsData?.map(data => { return data.profileId === user.profileId }).length
+                                                postsData?.map(data => { return data?.profileId === user?.profileId })?.length
                                             }
                                         </Slide>
                                         <span className='select-none text-base ml-2 font-normal text-zinc-800'>
