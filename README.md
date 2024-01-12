@@ -4,7 +4,7 @@
 
 # Sociol
 
-A sociol media app made using the MERN stack. Sociol app is a blend of LinkedIn and Instagram with all the required functionality required for a sociol media app.
+A sociol media app made using the MERN stack. Sociol app is a blend of LinkedIn and Instagram with all the required functionality required for a social media app.
 
 
 ## Live demo
