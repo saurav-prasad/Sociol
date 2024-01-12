@@ -9,7 +9,7 @@ A sociol media app made using the MERN stack. Sociol app is a blend of LinkedIn 
 
 ## Live demo
 
-Have a look of my app
+Have a look of the app:
 https://socioll.vercel.app/feed
 
 ## Features
@@ -28,9 +28,42 @@ https://socioll.vercel.app/feed
 
 ## Tech Stack
 
-**Client:** React, Redux, TailwindCSS, React Router Dom, SwiperJs, React Loading Skeleton, React Awesome Reveal, Axios, Lucide React, Firebase
+This app was built using the following technologies and tools:
 
-**Server:** Node, Express, MongoDB, Mongoose, Json Web Token, BcryptJs, Express Validator, Firebase, Cors
+- Frontend:
+  - HTML
+  - CSS
+  - JavaScript
+  - ReactJS
+  - TailwindCSS
+  - React Router Dom
+  - SwiperJs
+  - React Loading Skeleton
+  - React Awesome Reveal
+  - Axios
+  - Lucide React
+  - Firebase
+  
+
+- Backend:
+  - Node
+  - Express
+  - MongoDB
+  - Mongoose
+  - Json Web Token
+  - BcryptJs
+  - Express Validator
+  - Firebase
+  - Cors
+
+
+- Hosting & Deployment:
+  - Vercel
+
+- Version Control:
+  - Git
+  - GitHub
+
 
 ## Screenshots
 - Desktop view
