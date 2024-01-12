@@ -90,3 +90,17 @@ This app was built using the following technologies and tools:
 
 ![Copy of Screenshot_20231105-231053_Chrome jpg (1)](https://github.com/saurav-prasad/Sociol/assets/70149386/9d3a89f6-af17-4197-957a-fea307cce134)
 
+
+## Installation
+
+Provide instructions for setting up and running your project locally. Include any prerequisites, environment setup, and installation steps.
+
+```bash
+# Clone the repository
+git clone https://github.com/saurav-prasad/big-cart.git
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm start
