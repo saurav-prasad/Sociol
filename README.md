@@ -34,7 +34,7 @@ https://socioll.vercel.app/feed
 
 ## Screenshots
 - Desktop view
-- 
+  
 ![Screenshot 2024-01-12 195016](https://github.com/saurav-prasad/Sociol/assets/70149386/a791fd94-789f-48b9-8f09-839988360044)
 
 
