@@ -89,7 +89,7 @@ function SigninSignup() {
         }
     }
 
-    // fetching users data by aut token
+    // fetching users data by auth token
     useEffect(() => {
         async function fetchUser() {
             if (localStorage.getItem('auth-token')) {
@@ -108,10 +108,9 @@ function SigninSignup() {
                         token: localStorage.getItem('auth-token'),
 
                     }
-
                     dispatch(signIn(userData))
-                    setAuthStatus(false)
                     navigate('/')
+                    setAuthStatus(false)
 
                 } catch (error) {
                     console.log(error);
@@ -136,10 +135,7 @@ function SigninSignup() {
                         {pathname === "/signin" ? 'Sign-in' : 'Sign-up'} in to your account
                     </h2>
                 </div>
-                {authStatus &&
-                    <p className='fixed top-3/4 text-2xl w-full text-center font-semibold text-fuchsia-500'>
-                        Loggin-in please wait...
-                    </p>}
+
 
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-sm ">
                     <form className="space-y-6" onSubmit={onSubmit}>
@@ -248,6 +244,15 @@ function SigninSignup() {
                         </span>
                     </p>
                 </div>
+
+                {/* loader */}
+                {
+                    authStatus &&
+                    <div className='mt-12 w-full'>
+                        <span className="loaderBubble font-semibold"></span>
+                    </div>
+                }
+
             </div>
         </>
     )

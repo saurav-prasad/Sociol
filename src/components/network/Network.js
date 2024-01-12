@@ -3,6 +3,7 @@ import Profiles from './Profiles'
 import { useLocation, useParams } from 'react-router-dom'
 import { follow, profile } from '../../axios/axios'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
+import { Slide } from 'react-awesome-reveal'
 
 function Network() {
     const username = useParams().username
@@ -44,15 +45,17 @@ function Network() {
             <div className="flex flex-col space-y-6 ">
                 {/* All profiles */}
                 {
-                    data ? data.map((e, index) =>
-                        <Profiles
-                            key={index}
-                            profilePhoto={e.profilePhoto}
-                            username={e.username}
-                            about={e?.about}
-                            profileId={e.profileId}
-                        />
-                    ) :
+                    data ?
+                        data.map((e, index) =>
+                            <Slide key={index} direction='up' duration={230} triggerOnce cascade damping={0.1}>
+                                <Profiles
+                                    profilePhoto={e.profilePhoto}
+                                    username={e.username}
+                                    about={e?.about}
+                                    profileId={e.profileId}
+                                />
+                            </Slide>
+                        ) :
                         // sekeleton
                         <SkeletonTheme baseColor="#d4d4d4" highlightColor="#858383" >
                             {
