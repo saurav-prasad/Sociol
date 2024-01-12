@@ -13,6 +13,7 @@ Have a look of the app:
 https://socioll.vercel.app/feed
 
 ## Features
+List of some of the key features of the app:
 
 - Signin/Signup
 - Profile
