@@ -14,7 +14,7 @@ function Navbar({ navbarList }) {
         dispatch(signOut())
         localStorage.removeItem('auth-token')
     }
-    
+
     return (
         <aside className="z-10 h-screen hidden xl:flex fixed w-72 flex-col overflow-y-auto border-r bg-white px-10 py-8">
             {/* header */}
@@ -25,16 +25,7 @@ function Navbar({ navbarList }) {
                         {/* menu */}
                         {
                             navbarList.map((data, index) =>
-                                <span
-                                    key={index}
-                                    onClick={() => {
-                                        navigate(data.href); window.scrollTo(0, 0);
-                                    }}
-                                    className={`select-none cursor-pointer flex transform items-center rounded-lg px-3 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700`}
-                                >
-                                    {data.icon}
-                                    <span className="mx-5 text-md font-medium">{data.name}</span>
-                                </span>
+                                <Menu key={index} href={data.href} name={data.name} icon={data.icon} />
                             )
                         }
                         {/* profile menu */}
@@ -71,3 +62,19 @@ function Navbar({ navbarList }) {
 }
 
 export default Navbar
+
+export const Menu = ({ name, icon, href }) => {
+    const navigate = useNavigate()
+
+    return (
+        <span
+            onClick={() => {
+                navigate(href); window.scrollTo(0, 0);
+            }}
+            className={` select-none cursor-pointer flex transform items-center rounded-lg px-3 py-2 text-gray-600 transition-colors duration-300 hover:bg-gray-100 hover:text-gray-700`}
+        >
+            {icon}
+            <span className="mx-5 text-md font-medium">{name}</span>
+        </span>
+    )
+}

@@ -1,7 +1,7 @@
 import { Power, UserRound } from 'lucide-react'
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { signOut } from '../../features/auth/authSlice'
 
 
@@ -9,6 +9,7 @@ function BottomNavbar({ navbarList }) {
     const navigate = useNavigate()
     const { user } = useSelector(state => state.authReducer)
     const dispatch = useDispatch()
+    const pathname = useLocation().pathname
 
     const handelSignout = () => {
         window.scrollTo(0, 0);
@@ -23,14 +24,7 @@ function BottomNavbar({ navbarList }) {
                 {/* menus */}
                 {
                     navbarList.map((data, index) =>
-                        <span
-                            key={index}
-                            onClick={() => { navigate(data.href); window.scrollTo(0, 0); }}
-                            className={`cursor-pointer flex flex-col transform items-center rounded-lg px-3 py-1 text-gray-600 transition-colors duration-300 select-none hover:bg-gray-100 hover:text-gray-700`}
-                        >
-                            {data.icon}
-                            <span className=" text-xs font-normal">{data.name}</span>
-                        </span>
+                        <Menu href={data.href} key={index} name={data.name} icon={data.icon} />
                     )
                 }
                 {/* profile menu */}
@@ -38,7 +32,7 @@ function BottomNavbar({ navbarList }) {
                     onClick={() => {
                         navigate(user ? '/profile' : '/signin'); window.scrollTo(0, 0);
                     }}
-                    className="cursor-pointer flex flex-col transform items-center rounded-lg px-3 py-1 text-gray-600 transition-colors duration-300 select-none hover:bg-gray-100 hover:text-gray-700"
+                    className={`${pathname === '/profile' ? 'bg-gray-100 text-gray-700' : ''} cursor-pointer flex flex-col transform items-center rounded-lg px-3 py-1 text-gray-600 transition-colors duration-300 select-none hover:bg-gray-100 hover:text-gray-700`}
                 >
                     {
                         user ? <img className="h-8 w-8 rounded-full object-cover" src={user.profilePhoto} alt={user.username} /> :
@@ -64,3 +58,23 @@ function BottomNavbar({ navbarList }) {
 
 
 export default BottomNavbar
+
+
+export const Menu = ({ href, name, icon }) => {
+    const navigate = useNavigate()
+    const pathname = useLocation().pathname
+
+    const urls = {
+        Create: '/createpost',
+        Home: '/feed'
+    }
+    return (
+        <span
+            onClick={() => { navigate(href); window.scrollTo(0, 0); }}
+            className={`${urls[name] === pathname ? 'bg-gray-100 text-gray-700' : ''} cursor-pointer flex flex-col transform items-center rounded-lg px-3 py-1 text-gray-600 transition-colors duration-300 select-none hover:bg-gray-100 hover:text-gray-700`}
+        >
+            {icon}
+            <span className=" text-xs font-normal">{name}</span>
+        </span>
+    )
+}
