@@ -1,70 +1,106 @@
-# Getting Started with Create React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+<img src="https://github.com/saurav-prasad/Sociol/assets/70149386/30c4b31f-a95a-4290-bf82-b86e1495a16b" width="80px" height="80px"/>
 
-## Available Scripts
 
-In the project directory, you can run:
+# Sociol
 
-### `npm start`
+A sociol media app made using the MERN stack. Sociol app is a blend of LinkedIn and Instagram with all the required functionality required for a social media app.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Live demo
 
-### `npm test`
+Have a look of the app:
+https://socioll.vercel.app/feed
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## Features
+List of some of the key features of the app:
 
-### `npm run build`
+- Signin/Signup
+- Profile
+- Update profile
+- Feeds
+- Followers
+- Followings
+- Create a post
+- Comments
+- likes
+- Unique Usernames
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Tech Stack
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+This app was built using the following technologies and tools:
 
-### `npm run eject`
+- Frontend:
+  - HTML
+  - CSS
+  - JavaScript
+  - ReactJS
+  - TailwindCSS
+  - React Router Dom
+  - SwiperJs
+  - React Loading Skeleton
+  - React Awesome Reveal
+  - Axios
+  - Lucide React
+  - Firebase
+  
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+- Backend:
+  - Node
+  - Express
+  - MongoDB
+  - Mongoose
+  - Json Web Token
+  - BcryptJs
+  - Express Validator
+  - Firebase
+  - Cors
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Hosting & Deployment:
+  - Vercel
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- Version Control:
+  - Git
+  - GitHub
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Screenshots
+- Desktop view
+  
+![Screenshot 2024-01-12 195016](https://github.com/saurav-prasad/Sociol/assets/70149386/a791fd94-789f-48b9-8f09-839988360044)
 
-To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
+![Screenshot 2024-01-12 195158](https://github.com/saurav-prasad/Sociol/assets/70149386/84135cbc-6ca6-438f-945d-e807b379a6a7)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
-### Analyzing the Bundle Size
+![Screenshot 2024-01-12 195253](https://github.com/saurav-prasad/Sociol/assets/70149386/6b2d207e-67a4-4405-8e20-1c62980606ab)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
-### Making a Progressive Web App
+![Screenshot 2024-01-12 195314](https://github.com/saurav-prasad/Sociol/assets/70149386/91fd339b-2553-466c-920a-e819bee29a24)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
-### Advanced Configuration
+![Screenshot 2024-01-12 195454](https://github.com/saurav-prasad/Sociol/assets/70149386/c4f365ca-0cc8-46c2-bad8-14ea03e4af4c)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+- Mobile View
 
-### Deployment
+![Copy of Screenshot_20231105-231053_Chrome jpg](https://github.com/saurav-prasad/Sociol/assets/70149386/eee588fe-de0c-4094-8a03-af9e8176dbe7)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
 
-### `npm run build` fails to minify
+![Copy of Screenshot_20231105-231053_Chrome jpg (1)](https://github.com/saurav-prasad/Sociol/assets/70149386/9d3a89f6-af17-4197-957a-fea307cce134)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Installation
+
+Provide instructions for setting up and running your project locally. Include any prerequisites, environment setup, and installation steps.
+
+```bash
+# Clone the repository
+git clone https://github.com/saurav-prasad/Sociol.git
+
+# Install dependencies
+npm install
+
+# Start the development server
+npm start
