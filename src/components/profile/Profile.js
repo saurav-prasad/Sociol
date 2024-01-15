@@ -168,7 +168,7 @@ function Profile() {
                     </div>
                 </Zoom>
                 {/* Profile posts */}
-                <div className='flex flex-col mt-7 px-2 sm:px-6'>
+                <div className='flex flex-col mt-7 sm:px-6'>
                     {/* posts data -> postCard component */}
                     {
                         postsData ?
