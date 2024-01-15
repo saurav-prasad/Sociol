@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import Profiles from './Profiles'
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { follow, profile } from '../../axios/axios'
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton'
 import { Slide } from 'react-awesome-reveal'
+import { Undo2 } from 'lucide-react'
 
 function Network() {
+    const navigate = useNavigate()
     const username = useParams().username
     const pathname = useLocation().pathname
     const [data, setData] = useState()
@@ -39,9 +41,13 @@ function Network() {
     return (
         <div className="max-w-lg mx-auto">
             {/* Header */}
-            <h1 className="mb-4 text-3xl font-semibold text-gray-800 py-6  ">
-                {pathname.endsWith('/followings') ? "Followings" : "Followers"}
-            </h1>
+            <div className="relative mb-4">
+                <Undo2 onClick={() => navigate(-1)} className="absolute cursor-pointer top-[27px] left-2" strokeWidth={3} size={30} />
+                {/* Header */}
+                <h1 className="text-3xl flex-1 font-semibold text-gray-800 py-6  ">
+                    {pathname.endsWith('/followings') ? "Followings" : "Followers"}
+                </h1>
+            </div>
             <div className="flex flex-col space-y-6 ">
                 {/* All profiles */}
                 {

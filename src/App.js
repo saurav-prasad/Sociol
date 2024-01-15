@@ -18,6 +18,7 @@ import { createPost } from './features/post/postSlice';
 import UpdatePost from './components/updatePost/UpdatePost';
 import ProfileByUsername from './components/profileByUsername/ProfileByUsername';
 import Network from './components/network/Network';
+import Likes from './components/likes/Likes';
 
 function App() {
   const dispatch = useDispatch()
@@ -89,6 +90,10 @@ function App() {
         {
           path: "/profile/:username/followings",
           element: <Network />
+        },
+        {
+          path: "/post/:postid/likes",
+          element: <Likes />
         },
         {
           path: "/profile/update",

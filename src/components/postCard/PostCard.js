@@ -13,6 +13,7 @@ import Comment from '../comments/Comment';
 import timePassed from '../../functions/timePassed';
 import throttle from '../../functions/throttle';
 import Skeleton, { SkeletonTheme } from 'react-loading-skeleton';
+import Likes from '../likes/Likes';
 
 function PostCard({ profilePhoto, username, about, profileId, postKey, id, image, text, like, comment, timestamp }) {
     const [more, setMore] = useState(false)
@@ -26,6 +27,7 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
     const [deleteStatus, setDeleteStatus] = useState(false)
     const [likeStatus, setLikeStatus] = useState(false)
     const [likeCount, setLikeCount] = useState(like)
+
 
     // update a post
     const onUpdate = () => {
@@ -163,12 +165,12 @@ function PostCard({ profilePhoto, username, about, profileId, postKey, id, image
                     src={postImage}
                     onError={() => setPostImage()}
                     alt="Post"
-                    className="h-auto w-full object-contain"
+                    className="max-h-[70vh] w-full object-contain"
                 />}
                 {/* total likes */}
                 <div className='flex select-none flex-row items-center justify-between px-2 mt-3'>
                     <div>
-                        <span className='w-full mr-2 text-left text-base font-semibold text-slate-700'>{likeCount}
+                        <span onClick={() => { likeCount > 0 && navigate(`/post/${id}/likes`) }} className='cursor-pointer w-full mr-2 text-left text-base font-semibold text-slate-700'>{likeCount}
                             <span className='text-xs font-medium ml-1 text-slate-500'>Likes</span>
                         </span>
                         <span className='w-full text-left text-base font-semibold text-slate-700'>{comment}
@@ -267,3 +269,4 @@ export const PostCardSkeleton = () => {
         </SkeletonTheme>
     </>
 }
+
