@@ -35,6 +35,7 @@ This app was built using the following technologies and tools:
   - CSS
   - JavaScript
   - ReactJS
+  - Redux
   - TailwindCSS
   - React Router Dom
   - SwiperJs
