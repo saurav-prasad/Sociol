@@ -93,8 +93,6 @@ This app was built using the following technologies and tools:
 
 ## Installation
 
-Provide instructions for setting up and running your project locally. Include any prerequisites, environment setup, and installation steps.
-
 ```bash
 # Clone the repository
 git clone https://github.com/saurav-prasad/Sociol.git
